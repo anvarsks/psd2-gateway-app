@@ -29,9 +29,11 @@ Run `psd2-gateway-app` behind Kong API Gateway as a production-like local POC wi
 
 ## Logging Behavior
 
-The service logs this line when the endpoint is called:
+The service logs the Kong-generated correlation ID when the endpoint is called.
 
-`GET API has been hit`
+Example log:
+
+`GET API has been hit. X-Correlation-Id=<value>`
 
 ## Gateway Behavior
 
@@ -92,9 +94,11 @@ curl -i http://localhost:8001/services
 
 - HTTP status: `200 OK`
 - Response body: `psd2-gateway-app is running`
-- application log includes: `GET API has been hit`
+- application log includes the propagated `X-Correlation-Id`
 - response includes `X-Correlation-Id`
 
 ## Current User Activity
 
 As of April 17, 2026, the work has moved from a direct Spring Boot run to a Kong-fronted POC so the app can be exercised through the API gateway instead of calling the backend directly.
+
+The latest change propagates Kong's `X-Correlation-Id` into the Spring Boot controller and logs that value in the service layer for request tracing.

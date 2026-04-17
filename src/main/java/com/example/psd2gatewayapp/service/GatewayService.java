@@ -9,8 +9,8 @@ public class GatewayService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayService.class);
 
-    public String getStatus() {
-        LOGGER.info("GET API has been hit");
+    public String getStatus(String correlationId) {
+        LOGGER.info("GET API has been hit. X-Correlation-Id={}", correlationId);
         return "psd2-gateway-app is running";
     }
 }

@@ -2,6 +2,7 @@ package com.example.psd2gatewayapp.controller;
 
 import com.example.psd2gatewayapp.service.GatewayService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +17,7 @@ public class GatewayController {
     }
 
     @GetMapping("/status")
-    public String getStatus() {
-        return gatewayService.getStatus();
+    public String getStatus(@RequestHeader(value = "X-Correlation-Id", required = false) String correlationId) {
+        return gatewayService.getStatus(correlationId);
     }
 }
