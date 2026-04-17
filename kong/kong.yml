@@ -1,0 +1,25 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: psd2-gateway-app-service
+    url: http://psd2-gateway-app:8080/api/v1/gateway
+    routes:
+      - name: psd2-gateway-app-route
+        paths:
+          - /psd2
+        strip_path: true
+        methods:
+          - GET
+        protocols:
+          - http
+    plugins:
+      - name: correlation-id
+        config:
+          header_name: X-Correlation-Id
+          generator: uuid
+          echo_downstream: true
+      - name: rate-limiting
+        config:
+          minute: 60
+          policy: local
