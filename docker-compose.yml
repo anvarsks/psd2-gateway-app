@@ -51,6 +51,7 @@ services:
   splunk:
     image: splunk/splunk:9.3.11
     container_name: splunk-local
+    platform: linux/amd64
     profiles:
       - observability
     environment:

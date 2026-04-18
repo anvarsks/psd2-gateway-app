@@ -125,3 +125,5 @@ As of April 17, 2026, the work has moved from a direct Spring Boot run to a Kong
 The latest change propagates Kong's `X-Correlation-Id` into the Spring Boot controller and logs that value in the service layer for request tracing.
 
 The repo now also includes an observability profile that adds Splunk Enterprise and Fluent Bit without splitting the work into a second repository.
+
+On Apple Silicon Macs, the Splunk container is forced to `linux/amd64` because the official image is x86-64 only.

@@ -44,5 +44,6 @@ docker compose --profile observability up --build
 ## Notes
 
 - Splunk is optional through the `observability` profile
+- on Apple Silicon Macs, Splunk runs with `platform: linux/amd64`
 - runtime logs are local bind mounts and are not committed
 - `.env` should stay local and should not be committed

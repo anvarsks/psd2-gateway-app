@@ -33,6 +33,8 @@ Then start the full stack:
 docker compose --profile observability up --build
 ```
 
+On Apple Silicon Macs, Splunk runs under amd64 emulation because the official `splunk/splunk` image is x86-64 only.
+
 ## Endpoints
 
 - Kong proxy: `http://localhost:8000/psd2/status`
