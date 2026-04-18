@@ -24,6 +24,7 @@ Run `psd2-gateway-app` behind Kong API Gateway as a production-like local POC wi
 - Splunk HEC port: `18088`
 - Splunk management port: `18089`
 - Runtime: Docker Compose
+- Deployment assets live under: `deploy/`
 
 ## API Details
 
@@ -64,19 +65,19 @@ Example:
 Build and start the full POC:
 
 ```bash
-cd /Users/anvarshameemks/psd2-gateway-app && docker compose up --build
+cd /Users/anvarshameemks/psd2-gateway-app && docker compose -f deploy/docker-compose.yml up --build
 ```
 
 Build and start the full POC with Splunk observability:
 
 ```bash
-cd /Users/anvarshameemks/psd2-gateway-app && cp .env.example .env && docker compose --profile observability up --build
+cd /Users/anvarshameemks/psd2-gateway-app && cp .env.example .env && docker compose --env-file .env -f deploy/docker-compose.yml --profile observability up --build
 ```
 
 Stop the stack:
 
 ```bash
-cd /Users/anvarshameemks/psd2-gateway-app && docker compose down
+cd /Users/anvarshameemks/psd2-gateway-app && docker compose --env-file .env -f deploy/docker-compose.yml down
 ```
 
 ## Health Endpoints
@@ -127,3 +128,5 @@ The latest change propagates Kong's `X-Correlation-Id` into the Spring Boot cont
 The repo now also includes an observability profile that adds Splunk Enterprise and Fluent Bit without splitting the work into a second repository.
 
 On Apple Silicon Macs, the Splunk container is forced to `linux/amd64` because the official image is x86-64 only.
+
+The deployment layout has been reorganized for CI/CD readiness so Compose, Kong, and observability assets live under `deploy/` instead of the repo root.

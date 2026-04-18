@@ -8,3 +8,4 @@ runtime-logs/**
 !runtime-logs/.gitkeep
 splunk-data/**
 !splunk-data/.gitkeep
+.DS_Store

@@ -5,17 +5,28 @@ Spring Boot 3 / Java 17 backend behind Kong, with an optional local observabilit
 ## Structure
 
 - `src/` contains the Spring Boot application
-- `kong/` contains db-less Kong configuration
-- `observability/fluent-bit/` contains the log forwarder configuration
+- `deploy/` contains Docker Compose, Kong, and observability deployment assets
+- `deploy/kong/` contains db-less Kong configuration
+- `deploy/observability/fluent-bit/` contains the log forwarder configuration
+- `scripts/` contains repeatable local run commands
 - `runtime-logs/` is the local bind-mounted log area for app and Kong logs
 - `CONTEXT.md` captures the working context for the repo
-- `observability/CONTEXT.md` captures the observability setup context
+- `deploy/observability/CONTEXT.md` captures the observability setup context
+
+## CI/CD Direction
+
+The repo is organized so application code stays at the root while runtime and deployment assets live under `deploy/`. This makes it easier to add CI/CD pipelines that:
+
+- run Maven tests against the app
+- build the application image
+- validate Compose and gateway config
+- promote deployment assets by environment later
 
 ## Start App + Kong
 
 ```bash
 cd /Users/anvarshameemks/psd2-gateway-app
-docker compose up --build
+docker compose -f deploy/docker-compose.yml up --build
 ```
 
 ## Start App + Kong + Splunk
@@ -30,7 +41,7 @@ cp .env.example .env
 Then start the full stack:
 
 ```bash
-docker compose --profile observability up --build
+docker compose --env-file .env -f deploy/docker-compose.yml --profile observability up --build
 ```
 
 On Apple Silicon Macs, Splunk runs under amd64 emulation because the official `splunk/splunk` image is x86-64 only.
@@ -57,6 +68,14 @@ Tail Kong logs:
 ```bash
 tail -f /Users/anvarshameemks/psd2-gateway-app/runtime-logs/kong/proxy-access.log
 tail -f /Users/anvarshameemks/psd2-gateway-app/runtime-logs/kong/proxy-error.log
+```
+
+## Helper Scripts
+
+```bash
+./scripts/up-local.sh
+./scripts/up-observability.sh
+./scripts/down.sh
 ```
 
 ## Splunk Login

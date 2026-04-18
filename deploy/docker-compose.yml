@@ -1,13 +1,13 @@
 services:
   psd2-gateway-app:
     build:
-      context: .
+      context: ..
       dockerfile: Dockerfile
     container_name: psd2-gateway-app
     environment:
       APP_LOG_FILE: /var/log/psd2-gateway-app/application.log
     volumes:
-      - ./runtime-logs/app:/var/log/psd2-gateway-app
+      - ../runtime-logs/app:/var/log/psd2-gateway-app
     networks:
       - psd2-net
     healthcheck:
@@ -38,7 +38,7 @@ services:
       - "8100:8100"
     volumes:
       - ./kong/kong.yml:/opt/kong/kong.yml:ro
-      - ./runtime-logs/kong:/var/log/kong
+      - ../runtime-logs/kong:/var/log/kong
     networks:
       - psd2-net
     healthcheck:
@@ -81,8 +81,8 @@ services:
       SPLUNK_HEC_TOKEN: ${SPLUNK_HEC_TOKEN:-psd2-hec-token}
     volumes:
       - ./observability/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
-      - ./runtime-logs/app:/var/log/psd2-gateway-app:ro
-      - ./runtime-logs/kong:/var/log/kong:ro
+      - ../runtime-logs/app:/var/log/psd2-gateway-app:ro
+      - ../runtime-logs/kong:/var/log/kong:ro
       - fluent-bit-state:/fluent-bit/state
     networks:
       - psd2-net

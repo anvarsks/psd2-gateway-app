@@ -25,14 +25,14 @@ The runtime split is:
 Base stack:
 
 ```bash
-docker compose up --build
+docker compose -f deploy/docker-compose.yml up --build
 ```
 
 Full stack with observability:
 
 ```bash
 cp .env.example .env
-docker compose --profile observability up --build
+docker compose --env-file .env -f deploy/docker-compose.yml --profile observability up --build
 ```
 
 ## Splunk Ports
