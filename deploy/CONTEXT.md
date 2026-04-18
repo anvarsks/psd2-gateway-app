@@ -19,6 +19,6 @@ Keep runtime and deployment assets separate from application source code so the 
 
 ## TLS Note
 
-Kong terminates HTTPS on port `8443` using locally generated development certificates.
+NGINX terminates HTTPS on port `8443` using locally generated development certificates and validates the sample TPP client certificate against the generated CA.
 
-The sample TPP app is configured to trust the generated CA and present its client certificate. Full gateway-side certificate allowlisting is not yet enforced because the repo currently uses OSS Kong.
+Kong stays behind NGINX and handles gateway concerns such as routing and rate limiting.

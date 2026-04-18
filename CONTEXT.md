@@ -18,7 +18,7 @@ Run `psd2-gateway-app` behind Kong API Gateway as a production-like local POC wi
 - App name: `psd2-gateway-app`
 - Backend port: `8080`
 - Kong proxy port: `8000`
-- Kong TLS proxy port: `8443`
+- NGINX mTLS edge port: `8443`
 - Kong admin port: `8001`
 - Kong status port: `8100`
 - Splunk Web port: `18000`
@@ -49,13 +49,15 @@ The application also writes logs to a bind-mounted host path through:
 
 ## TLS and TPP Flow
 
-Kong now terminates HTTPS for the PSD2 gateway using a locally generated server certificate.
+NGINX now sits in front of Kong and terminates HTTPS for the PSD2 gateway using a locally generated server certificate.
 
 The repo also includes a separate Spring Boot sample TPP application under `tpp-client-app/` that:
 
-- calls Kong over HTTPS
+- calls the NGINX edge over HTTPS
 - trusts the local development CA
-- presents its own client certificate so the local POC is ready for mTLS-style flows
+- presents its own client certificate
+
+NGINX validates the client certificate against the local CA before forwarding to Kong over the internal Docker network.
 
 For local development, certificate assets are generated under:
 
@@ -71,7 +73,7 @@ Configured gateway features:
 - `correlation-id` plugin enabled
 - `rate-limiting` plugin enabled with a local policy
 - Kong forwards traffic to `http://psd2-gateway-app:8080/api/v1/gateway`
-- Kong terminates TLS on `8443`
+- NGINX terminates TLS on `8443` and forwards to Kong on `8000`
 
 Example:
 
@@ -181,12 +183,8 @@ On Apple Silicon Macs, the Splunk container is forced to `linux/amd64` because t
 
 The deployment layout has been reorganized for CI/CD readiness so Compose, Kong, and observability assets live under `deploy/` instead of the repo root.
 
-The repo now also includes HTTPS termination at Kong and a separate `tpp-client-app` module for the sample TPP consumer flow.
+The repo now also includes an OSS-friendly mTLS edge:
 
-Important limitation:
-
-- the sample TPP app is prepared to present a client certificate
-- however, the current gateway image is OSS Kong
-- Kong's built-in certificate-to-consumer allowlisting plugin `mtls-auth` is Enterprise-only
-
-So the current POC implements HTTPS termination and a TPP client prepared for mTLS, while full gateway-side certificate allowlisting remains the next upgrade step.
+- NGINX validates the TPP client certificate
+- Kong remains responsible for API gateway behavior
+- the sample `tpp-client-app` exercises the HTTPS client flow

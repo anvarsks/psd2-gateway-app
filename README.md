@@ -8,6 +8,7 @@ Spring Boot 3 / Java 17 backend behind Kong, with an optional local observabilit
 - `deploy/` contains Docker Compose, Kong, and observability deployment assets
 - `deploy/kong/` contains db-less Kong configuration
 - `deploy/certs/` contains TLS asset documentation and generated local development certificates
+- `deploy/nginx/` contains the mTLS edge configuration
 - `deploy/observability/fluent-bit/` contains the log forwarder configuration
 - `scripts/` contains repeatable local run commands
 - `tpp-client-app/` contains a separate Spring Boot client app acting as a sample TPP
@@ -57,7 +58,7 @@ On Apple Silicon Macs, Splunk runs under amd64 emulation because the official `s
 ## Endpoints
 
 - Kong proxy: `http://localhost:8000/psd2/status`
-- Kong TLS proxy: `https://localhost:8443/psd2/status`
+- NGINX mTLS edge: `https://localhost:8443/psd2/status`
 - Kong admin API: `http://localhost:8001/services`
 - Kong status: `http://localhost:8100/status`
 - Splunk Web: `http://localhost:18000`
@@ -79,24 +80,27 @@ Then call the TPP app:
 curl -i http://localhost:8085/api/v1/tpp/gateway-status
 ```
 
-The TPP app calls Kong over HTTPS and trusts the locally generated gateway certificate.
+The TPP app calls the NGINX edge over HTTPS and presents its client certificate. NGINX validates the client certificate against the local development CA, then forwards the request to Kong.
 
 ## Mutual TLS Note
 
 The industry-standard model is that a TPP presents a client certificate and the API provider allows only approved certificates or approved issuing CAs.
 
-This repo now includes local development certificates for the TPP and the gateway, and the TPP client is wired to present its client certificate. However, the current gateway image is OSS Kong. Kong's built-in `mtls-auth` plugin for certificate-to-consumer enforcement is Enterprise-only.
+This repo now includes local development certificates for the TPP and the gateway, and the TPP client is wired to present its client certificate. NGINX performs the client-certificate validation at the edge before forwarding to Kong.
 
 So the current repo implements:
 
-- HTTPS termination at Kong
-- a sample TPP app calling Kong over HTTPS
-- a TPP client certificate ready for mTLS-style flows
+- HTTPS termination at the NGINX edge
+- client-certificate validation at the NGINX edge
+- Kong behind NGINX for routing, rate limiting, and logging
+- a sample TPP app calling the edge over HTTPS
 
-To enforce certificate allowlisting at the gateway edge, the next production-grade step is either:
+This is the OSS-friendly version of the production pattern:
 
-- Kong Enterprise with the `mtls-auth` plugin
-- or another edge layer that performs mTLS client-certificate verification before Kong
+- NGINX handles mTLS transport security
+- Kong handles API gateway behavior
+
+If you later move to Kong Enterprise, you can choose to collapse more of the certificate-auth responsibility into Kong.
 
 ## Live Logs
 

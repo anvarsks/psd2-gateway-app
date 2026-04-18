@@ -6,11 +6,8 @@ Provide a separate Spring Boot application that acts as a sample TPP consuming t
 
 ## Current Flow
 
-- the TPP app calls Kong at `https://kong-psd2-gateway:8443/psd2/status`
-- Kong terminates TLS and forwards the request to `psd2-gateway-app`
+- the TPP app calls NGINX at `https://nginx-psd2-edge:8443/psd2/status`
+- NGINX terminates TLS, validates the client certificate, and forwards the request to Kong
+- Kong forwards the request to `psd2-gateway-app`
 - the TPP app trusts the local development CA generated under `deploy/certs/generated/`
-- the TPP app is also configured to present its own client certificate for future mTLS enforcement
-
-## Important Limitation
-
-The TPP client certificate is prepared and used by the sample TPP app, but the current repo uses OSS Kong. Full gateway-side certificate allowlisting requires Kong Enterprise `mtls-auth` or another mTLS-capable edge.
+- the TPP app is configured to present its own client certificate during the HTTPS handshake

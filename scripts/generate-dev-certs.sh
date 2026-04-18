@@ -35,8 +35,9 @@ extendedKeyUsage = serverAuth
 
 [ alt_names ]
 DNS.1 = localhost
-DNS.2 = kong-psd2-gateway
-DNS.3 = host.docker.internal
+DNS.2 = nginx-psd2-edge
+DNS.3 = kong-psd2-gateway
+DNS.4 = host.docker.internal
 IP.1 = 127.0.0.1
 EOF
 
