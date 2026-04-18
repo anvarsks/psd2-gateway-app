@@ -9,3 +9,5 @@ runtime-logs/**
 splunk-data/**
 !splunk-data/.gitkeep
 .DS_Store
+deploy/certs/generated/**
+!deploy/certs/generated/.gitkeep

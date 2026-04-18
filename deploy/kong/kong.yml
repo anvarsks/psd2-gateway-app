@@ -13,6 +13,7 @@ services:
           - GET
         protocols:
           - http
+          - https
     plugins:
       - name: correlation-id
         config:

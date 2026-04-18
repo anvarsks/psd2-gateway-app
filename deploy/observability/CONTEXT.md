@@ -16,6 +16,7 @@ The runtime split is:
 
 - Spring Boot writes to `/var/log/psd2-gateway-app/application.log`
 - Kong writes access and error logs to `/var/log/kong/*.log`
+- the sample TPP app can generate additional client-side request logs when the `tpp-demo` profile is used
 - bind mounts expose those logs under `runtime-logs/` on the host
 - Fluent Bit tails those files and forwards them to Splunk HEC
 - Splunk Enterprise provides the searchable UI and HEC endpoint
@@ -47,3 +48,24 @@ docker compose --env-file .env -f deploy/docker-compose.yml --profile observabil
 - on Apple Silicon Macs, Splunk runs with `platform: linux/amd64`
 - runtime logs are local bind mounts and are not committed
 - `.env` should stay local and should not be committed
+
+## Retention Rules
+
+History is retained across normal restarts when these remain intact:
+
+- `runtime-logs/app/`
+- `runtime-logs/kong/`
+- Docker volume `splunk-data`
+- Docker volume `fluent-bit-state`
+
+Avoid this unless you intentionally want to wipe history:
+
+```bash
+docker compose --env-file .env -f deploy/docker-compose.yml --profile observability down -v
+```
+
+Preferred stop command:
+
+```bash
+docker compose --env-file .env -f deploy/docker-compose.yml --profile observability down
+```

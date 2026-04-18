@@ -22,6 +22,9 @@ jobs:
       - name: Run tests
         run: mvn test
 
+      - name: Run TPP tests
+        run: mvn -f tpp-client-app/pom.xml test
+
       - name: Validate base Compose
         run: docker compose -f deploy/docker-compose.yml config
 
