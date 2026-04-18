@@ -8,6 +8,7 @@ Run `psd2-gateway-app` behind Kong API Gateway as a production-like local POC wi
 - a `GET` API exposed through Kong
 - service-side logging when the API is hit
 - containerized local orchestration for end-to-end testing
+- optional Splunk-based observability for continuous log viewing and search
 
 ## Current Implementation
 
@@ -19,6 +20,9 @@ Run `psd2-gateway-app` behind Kong API Gateway as a production-like local POC wi
 - Kong proxy port: `8000`
 - Kong admin port: `8001`
 - Kong status port: `8100`
+- Splunk Web port: `18000`
+- Splunk HEC port: `18088`
+- Splunk management port: `18089`
 - Runtime: Docker Compose
 
 ## API Details
@@ -34,6 +38,10 @@ The service logs the Kong-generated correlation ID when the endpoint is called.
 Example log:
 
 `GET API has been hit. X-Correlation-Id=<value>`
+
+The application also writes logs to a bind-mounted host path through:
+
+`runtime-logs/app/application.log`
 
 ## Gateway Behavior
 
@@ -59,6 +67,12 @@ Build and start the full POC:
 cd /Users/anvarshameemks/psd2-gateway-app && docker compose up --build
 ```
 
+Build and start the full POC with Splunk observability:
+
+```bash
+cd /Users/anvarshameemks/psd2-gateway-app && cp .env.example .env && docker compose --profile observability up --build
+```
+
 Stop the stack:
 
 ```bash
@@ -69,6 +83,7 @@ cd /Users/anvarshameemks/psd2-gateway-app && docker compose down
 
 - backend health: `http://localhost:8080/actuator/health` inside the app container
 - Kong status health: `http://localhost:8100/status`
+- Splunk Web UI: `http://localhost:18000`
 
 ## Test Commands
 
@@ -90,6 +105,12 @@ Optional Kong admin API check:
 curl -i http://localhost:8001/services
 ```
 
+Tail application logs continuously from the host:
+
+```bash
+tail -f /Users/anvarshameemks/psd2-gateway-app/runtime-logs/app/application.log
+```
+
 ## Expected Result
 
 - HTTP status: `200 OK`
@@ -102,3 +123,5 @@ curl -i http://localhost:8001/services
 As of April 17, 2026, the work has moved from a direct Spring Boot run to a Kong-fronted POC so the app can be exercised through the API gateway instead of calling the backend directly.
 
 The latest change propagates Kong's `X-Correlation-Id` into the Spring Boot controller and logs that value in the service layer for request tracing.
+
+The repo now also includes an observability profile that adds Splunk Enterprise and Fluent Bit without splitting the work into a second repository.

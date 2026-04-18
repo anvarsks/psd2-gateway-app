@@ -3,3 +3,8 @@ target/
 .classpath
 .project
 .settings/
+.env
+runtime-logs/**
+!runtime-logs/.gitkeep
+splunk-data/**
+!splunk-data/.gitkeep
