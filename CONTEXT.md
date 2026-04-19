@@ -52,6 +52,7 @@ The adapter services will own:
 - Runtime: Docker Compose
 - Deployment assets live under: `deploy/`
 - Jenkins pipeline assets live under: `ci/jenkins/`
+- Local Jenkins and Artifactory runtime assets live under: `ci/local/`
 - Sample TPP client app lives under: `tpp-client-app/`
 - First ASPSP adapter lives under: `adapter-dnb/`
 - Mock DNB bank lives under: `mock-dnb-bank/`
@@ -218,9 +219,13 @@ Jenkins pipeline files now exist for:
 
 The current intended CI/CD model is:
 
-- CI builds and pushes Docker images to JFrog Artifactory
-- CD pulls immutable image tags from Artifactory
+- CI builds and pushes Docker images to a configurable registry
+- CD pulls immutable image tags from that registry
 - CD deploys with `deploy/docker-compose.release.yml`
+
+For local development, Jenkins and a plain Docker registry can now be started with:
+
+- `docker compose -f ci/local/docker-compose.yml up --build -d`
 
 ## Health Endpoints
 

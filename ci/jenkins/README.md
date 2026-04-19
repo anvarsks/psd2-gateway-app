@@ -26,27 +26,28 @@ Example registry value:
 
 `mycompany.jfrog.io/docker-dev-local`
 
-## Why JFrog Artifactory
+## Artifact Store
 
-Artifactory can act as:
+The pipelines are written so the registry endpoint is configurable.
 
-- a Docker registry for your application images
-- a Maven repository for your Java artifacts if you decide to publish jars as well
+For local development, use the local Docker registry:
 
-For this repo, the Jenkins CI jobs are wired to push Docker images first. That is the cleanest starting point for CD because the deploy jobs can pull immutable image tags.
+`localhost:15001`
+
+For a more enterprise setup later, replace that with JFrog Artifactory or another managed registry.
 
 ## Recommended Flow
 
 1. CI job runs tests.
 2. CI job builds the jar.
 3. CI job builds the Docker image.
-4. CI job pushes the Docker image to Artifactory.
+4. CI job pushes the Docker image to the configured registry.
 5. CD job takes an image tag as input.
-6. CD job pulls that image from Artifactory.
+6. CD job pulls that image from the configured registry.
 7. CD job deploys it with `deploy/docker-compose.release.yml`.
 
 ## Notes
 
 - The current CD jobs are designed around Docker Compose deployment.
-- For a real non-local environment, point the CD jobs at the target Docker host or move the same image flow to Kubernetes, TAS, or another runtime later.
+- For a real non-local environment, point the same pipelines at Artifactory, ECR, GCR, ACR, or another registry.
 - The mock DNB bank remains local-demo infrastructure for now.

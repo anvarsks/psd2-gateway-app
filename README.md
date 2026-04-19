@@ -12,6 +12,7 @@ Spring Boot 3 / Java 17 backend behind Kong, with an optional local observabilit
 - `deploy/outbound-nginx/` contains the outbound DNB API gateway configuration
 - `deploy/observability/fluent-bit/` contains the log forwarder configuration
 - `ci/jenkins/` contains Jenkins CI/CD pipelines for the gateway and adapter
+- `ci/local/` contains a local Jenkins + Artifactory runtime
 - `scripts/` contains repeatable local run commands
 - `tpp-client-app/` contains a separate Spring Boot client app acting as a sample TPP
 - `adapter-dnb/` contains the first ASPSP-specific internal adapter
@@ -38,6 +39,26 @@ The repo now also includes Jenkins pipeline definitions for:
 - `adapter-dnb` CD
 
 The intended artifact store is JFrog Artifactory used as a Docker registry.
+
+## Local CI/CD Runtime
+
+Start local Jenkins and the local Docker registry:
+
+```bash
+cd /Users/anvarshameemks/psd2-gateway-app
+docker compose -f ci/local/docker-compose.yml up --build -d
+```
+
+Access:
+
+- Jenkins: `http://localhost:18080`
+- Local Docker registry API: `http://localhost:15001/v2/`
+
+Get the Jenkins initial admin password:
+
+```bash
+docker exec local-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+```
 
 ## Start App + Kong
 

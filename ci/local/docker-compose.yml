@@ -1,0 +1,36 @@
+services:
+  jenkins:
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    container_name: local-jenkins
+    user: root
+    ports:
+      - "18080:8080"
+      - "15000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /Users/anvarshameemks/psd2-gateway-app:/workspace/psd2-gateway-app
+    environment:
+      JAVA_OPTS: -Djenkins.install.runSetupWizard=true
+    networks:
+      - cicd-net
+
+  registry:
+    image: registry:2
+    container_name: local-docker-registry
+    ports:
+      - "15001:5000"
+    volumes:
+      - registry_data:/var/lib/registry
+    networks:
+      - cicd-net
+
+volumes:
+  jenkins_home:
+  registry_data:
+
+networks:
+  cicd-net:
+    driver: bridge
