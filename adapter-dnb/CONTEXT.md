@@ -9,7 +9,7 @@ Provide the first ASPSP-specific adapter for internal zero-trust development.
 - exposes the first DNB AIS internal endpoint slice
 - requires mTLS from the gateway
 - authorizes requests using the shared YAML internal access policy
-- calls `mock-dnb-bank` over outbound mTLS
+- calls `outbound-dnb-apigw` over outbound mTLS
 - returns DNB-shaped payloads that the gateway normalizes
 
 ## Current Endpoints
@@ -35,4 +35,4 @@ Policy source:
 
 Outbound bank target:
 
-- `https://mock-dnb-bank:9444/v1`
+- `https://outbound-dnb-apigw:9445/v1`

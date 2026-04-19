@@ -22,7 +22,7 @@ Planned internal adapter examples:
 
 Planned traffic path:
 
-- `TPP -> NGINX mTLS edge -> Kong -> psd2-gateway-app -> ASPSP adapter -> ASPSP`
+- `TPP -> NGINX mTLS edge -> Kong -> psd2-gateway-app -> ASPSP adapter -> outbound API gateway -> ASPSP`
 
 The gateway will own:
 
@@ -136,16 +136,26 @@ Current internal flow:
 - `psd2-gateway-app -> adapter-dnb` over HTTPS with mTLS
 - `adapter-dnb` validates the gateway certificate
 - `adapter-dnb` enforces caller authorization using `deploy/security/internal-access-policy.yml`
-- `adapter-dnb -> mock-dnb-bank` over HTTPS with mTLS
-- `mock-dnb-bank` validates the adapter certificate
+- `adapter-dnb -> outbound-dnb-apigw` over HTTPS with mTLS
+- `outbound-dnb-apigw` validates the adapter certificate and terminates inbound TLS
+- `outbound-dnb-apigw -> mock-dnb-bank` over HTTPS with mTLS
+- `mock-dnb-bank` validates the outbound gateway certificate
 - `mock-dnb-bank` enforces caller authorization using `deploy/security/mock-dnb-access-policy.yml`
 - `psd2-gateway-app` returns a canonical response object to the caller
+
+Latest validated runtime flow:
+
+- `GET /psd2/aspsps/dnb/accounts` returned `200` through Kong
+- correlation ID `e2e-dnb-003` flowed through the gateway path
+- `outbound-dnb-apigw` access log showed client DN `CN=adapter-dnb,O=Adapter DNB,C=NO`
 
 Implemented internal policy examples:
 
 - client DN `CN=psd2-gateway-app,O=PSD2 Gateway,C=NO`
 - may call the internal DNB consent and account endpoints on `adapter-dnb`
 - client DN `CN=adapter-dnb,O=Adapter DNB,C=NO`
+- may call the outbound DNB API gateway on `outbound-dnb-apigw`
+- client DN `CN=outbound-dnb-apigw,O=Outbound API Gateway,C=NO`
 - may call the DNB-shaped `/v1` AIS endpoints on `mock-dnb-bank`
 
 Implemented public gateway endpoints:

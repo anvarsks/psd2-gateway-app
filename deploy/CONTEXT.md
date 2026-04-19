@@ -8,6 +8,8 @@ Keep runtime and deployment assets separate from application source code so the 
 
 - `deploy/docker-compose.yml` for local orchestration
 - `deploy/kong/` for Kong db-less gateway config
+- `deploy/nginx/` for the public inbound mTLS edge
+- `deploy/outbound-nginx/` for the outbound DNB API gateway
 - `deploy/certs/` for TLS asset documentation and generated development certificates
 - `deploy/observability/` for Splunk and Fluent Bit configuration context
 - `deploy/security/` for internal service-to-service authorization policies
@@ -22,6 +24,7 @@ Current default runtime now includes:
 
 - `psd2-gateway-app`
 - `adapter-dnb`
+- `outbound-dnb-apigw`
 - `mock-dnb-bank`
 - `kong`
 - `nginx-edge`
@@ -58,5 +61,12 @@ The first internal adapter implementation now exists:
 Current enforced rules:
 
 - `psd2-gateway-app` certificate DN is allowed to call the internal DNB adapter endpoints
-- `adapter-dnb` certificate DN is allowed to call the mock DNB AIS endpoints
+- `adapter-dnb` certificate DN is allowed to call the outbound DNB API gateway
+- `outbound-dnb-apigw` certificate DN is allowed to call the mock DNB AIS endpoints
 - unspecified callers or endpoints are rejected
+
+Latest verification:
+
+- local Compose stack started successfully with the outbound gateway in place
+- `GET /psd2/aspsps/dnb/accounts` returned `200` through Kong
+- outbound gateway access log showed adapter client DN `CN=adapter-dnb,O=Adapter DNB,C=NO`

@@ -9,6 +9,7 @@ Spring Boot 3 / Java 17 backend behind Kong, with an optional local observabilit
 - `deploy/kong/` contains db-less Kong configuration
 - `deploy/certs/` contains TLS asset documentation and generated local development certificates
 - `deploy/nginx/` contains the mTLS edge configuration
+- `deploy/outbound-nginx/` contains the outbound DNB API gateway configuration
 - `deploy/observability/fluent-bit/` contains the log forwarder configuration
 - `scripts/` contains repeatable local run commands
 - `tpp-client-app/` contains a separate Spring Boot client app acting as a sample TPP
@@ -107,15 +108,17 @@ If you later move to Kong Enterprise, you can choose to collapse more of the cer
 
 ## Internal Adapter Demo
 
-The first internal zero-trust slice is implemented with `adapter-dnb` and `mock-dnb-bank`.
+The first internal zero-trust slice is implemented with `adapter-dnb`, `outbound-dnb-apigw`, and `mock-dnb-bank`.
 
 Current internal flow:
 
 - `psd2-gateway-app` calls `adapter-dnb` over HTTPS with mTLS
 - `adapter-dnb` validates the gateway certificate
 - `adapter-dnb` checks the caller DN and endpoint against `deploy/security/internal-access-policy.yml`
-- `adapter-dnb` calls `mock-dnb-bank` over HTTPS with mTLS
-- `mock-dnb-bank` validates the adapter certificate
+- `adapter-dnb` calls `outbound-dnb-apigw` over HTTPS with mTLS
+- `outbound-dnb-apigw` validates the adapter certificate and terminates outbound TLS from the adapter
+- `outbound-dnb-apigw` calls `mock-dnb-bank` over HTTPS with mTLS
+- `mock-dnb-bank` validates the outbound gateway certificate
 - `mock-dnb-bank` checks the caller DN and endpoint against `deploy/security/mock-dnb-access-policy.yml`
 - the gateway returns a canonical response body to the caller
 

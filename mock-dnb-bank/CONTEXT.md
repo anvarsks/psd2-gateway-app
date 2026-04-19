@@ -3,6 +3,7 @@
 - Purpose: local mock ASPSP that exposes a DNB-like AIS surface from the downloaded spec.
 - Security: mTLS required on all `/v1/**` endpoints.
 - Client authorization: policy-driven allowlist based on client DN and endpoint path.
+- Allowed caller: `CN=outbound-dnb-apigw,O=Outbound API Gateway,C=NO`
 - Current slice:
   - `POST /v1/consents`
   - `GET /v1/consents/{consentId}`

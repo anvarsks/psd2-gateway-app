@@ -29,14 +29,14 @@ services:
       dockerfile: Dockerfile
     container_name: adapter-dnb
     depends_on:
-      - mock-dnb-bank
+      - outbound-dnb-apigw
     environment:
       ADAPTER_LOG_FILE: /var/log/adapter-dnb/application.log
       ADAPTER_DNB_KEY_STORE_PATH: /certs/adapter-dnb.p12
       ADAPTER_DNB_KEY_STORE_PASSWORD: changeit
       ADAPTER_DNB_TRUST_STORE_PATH: /certs/adapter-dnb-truststore.p12
       ADAPTER_DNB_TRUST_STORE_PASSWORD: changeit
-      MOCK_DNB_BANK_BASE_URL: https://mock-dnb-bank:9444
+      MOCK_DNB_BANK_BASE_URL: https://outbound-dnb-apigw:9445
       MOCK_DNB_BANK_KEY_STORE_PATH: /certs/adapter-dnb.p12
       MOCK_DNB_BANK_KEY_STORE_PASSWORD: changeit
       MOCK_DNB_BANK_TRUST_STORE_PATH: /certs/adapter-dnb-truststore.p12
@@ -46,6 +46,21 @@ services:
       - ./certs/generated:/certs:ro
       - ./security:/policy:ro
       - ../runtime-logs/adapter-dnb:/var/log/adapter-dnb
+    networks:
+      - psd2-net
+
+  outbound-dnb-apigw:
+    image: nginx:1.27-alpine
+    container_name: outbound-dnb-apigw
+    depends_on:
+      - mock-dnb-bank
+    volumes:
+      - ./outbound-nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs/generated/outbound-dnb-apigw.crt:/etc/nginx/certs/server.crt:ro
+      - ./certs/generated/outbound-dnb-apigw.key:/etc/nginx/certs/server.key:ro
+      - ./certs/generated/outbound-dnb-apigw.crt:/etc/nginx/certs/client.crt:ro
+      - ./certs/generated/outbound-dnb-apigw.key:/etc/nginx/certs/client.key:ro
+      - ./certs/generated/ca.crt:/etc/nginx/certs/ca.crt:ro
     networks:
       - psd2-net
 

@@ -106,7 +106,7 @@ public class DnbBankClientService {
         }
 
         HttpResponse<String> response = client.send(builder.build(), HttpResponse.BodyHandlers.ofString());
-        LOGGER.info("Mock DNB bank call completed. method={} path={} status={} X-Correlation-Id={}",
+        LOGGER.info("Outbound DNB API gateway call completed. method={} path={} status={} X-Correlation-Id={}",
                 method,
                 path,
                 response.statusCode(),

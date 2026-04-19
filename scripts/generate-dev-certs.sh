@@ -188,6 +188,34 @@ openssl pkcs12 -export \
   -passout "pass:$PASSWORD" \
   -name "mock-dnb-bank"
 
+cat > "$TMP_DIR/outbound-dnb-apigw-openssl.cnf" <<'EOF'
+[ req ]
+distinguished_name = req_distinguished_name
+prompt = no
+req_extensions = req_ext
+
+[ req_distinguished_name ]
+C = NO
+O = Outbound API Gateway
+CN = outbound-dnb-apigw
+
+[ req_ext ]
+subjectAltName = @alt_names
+extendedKeyUsage = serverAuth, clientAuth
+
+[ alt_names ]
+DNS.1 = outbound-dnb-apigw
+EOF
+
+openssl genrsa -out "$CERT_DIR/outbound-dnb-apigw.key" 2048
+openssl req -new -key "$CERT_DIR/outbound-dnb-apigw.key" \
+  -out "$TMP_DIR/outbound-dnb-apigw.csr" \
+  -config "$TMP_DIR/outbound-dnb-apigw-openssl.cnf"
+openssl x509 -req -in "$TMP_DIR/outbound-dnb-apigw.csr" \
+  -CA "$CERT_DIR/ca.crt" -CAkey "$CERT_DIR/ca.key" -CAcreateserial \
+  -out "$CERT_DIR/outbound-dnb-apigw.crt" -days 825 -sha256 \
+  -extfile "$TMP_DIR/outbound-dnb-apigw-openssl.cnf" -extensions req_ext
+
 rm -f "$CERT_DIR/tpp-truststore.p12"
 keytool -importcert -noprompt \
   -alias psd2-dev-ca \

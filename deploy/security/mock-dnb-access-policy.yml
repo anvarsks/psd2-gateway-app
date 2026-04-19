@@ -1,5 +1,5 @@
 clients:
-  - clientDn: "CN=adapter-dnb,O=Adapter DNB,C=NO"
+  - clientDn: "CN=outbound-dnb-apigw,O=Outbound API Gateway,C=NO"
     allowedEndpoints:
       - method: "POST"
         path: "/v1/consents"
