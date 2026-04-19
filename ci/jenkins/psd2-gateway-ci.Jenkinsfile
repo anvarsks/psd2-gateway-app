@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'jdk17'
-    }
-
     environment {
         APP_NAME = 'psd2-gateway-app'
         MODULE_DIR = '.'

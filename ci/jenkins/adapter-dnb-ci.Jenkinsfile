@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'jdk17'
-    }
-
     environment {
         APP_NAME = 'adapter-dnb'
         MODULE_DIR = 'adapter-dnb'
