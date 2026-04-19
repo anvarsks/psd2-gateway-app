@@ -11,6 +11,8 @@ services:
         strip_path: true
         methods:
           - GET
+          - POST
+          - DELETE
         protocols:
           - http
           - https

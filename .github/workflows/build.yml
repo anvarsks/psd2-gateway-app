@@ -25,6 +25,12 @@ jobs:
       - name: Run TPP tests
         run: mvn -f tpp-client-app/pom.xml test
 
+      - name: Run adapter tests
+        run: mvn -f adapter-dnb/pom.xml test
+
+      - name: Run mock bank tests
+        run: mvn -f mock-dnb-bank/pom.xml test
+
       - name: Validate base Compose
         run: docker compose -f deploy/docker-compose.yml config
 

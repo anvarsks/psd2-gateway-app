@@ -1,0 +1,17 @@
+clients:
+  - clientDn: "CN=adapter-dnb,O=Adapter DNB,C=NO"
+    allowedEndpoints:
+      - method: "POST"
+        path: "/v1/consents"
+      - method: "GET"
+        path: "/v1/consents/{consentId}"
+      - method: "DELETE"
+        path: "/v1/consents/{consentId}"
+      - method: "GET"
+        path: "/v1/consents/{consentId}/status"
+      - method: "GET"
+        path: "/v1/accounts"
+      - method: "GET"
+        path: "/v1/accounts/{accountNumber}"
+      - method: "GET"
+        path: "/v1/accounts/{accountNumber}/balances"

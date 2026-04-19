@@ -12,10 +12,10 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>psd2-gateway-app</artifactId>
+    <artifactId>adapter-dnb</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>psd2-gateway-app</name>
-    <description>Spring Boot gateway app with a GET API</description>
+    <name>adapter-dnb</name>
+    <description>DNB specific adapter service</description>
 
     <properties>
         <java.version>17</java.version>
@@ -30,6 +30,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
         </dependency>
 
         <dependency>

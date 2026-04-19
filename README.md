@@ -12,6 +12,9 @@ Spring Boot 3 / Java 17 backend behind Kong, with an optional local observabilit
 - `deploy/observability/fluent-bit/` contains the log forwarder configuration
 - `scripts/` contains repeatable local run commands
 - `tpp-client-app/` contains a separate Spring Boot client app acting as a sample TPP
+- `adapter-dnb/` contains the first ASPSP-specific internal adapter
+- `mock-dnb-bank/` contains a DNB-like mock ASPSP behind mTLS
+- `aspsp specs/dnb/` contains the downloaded DNB AIS and PIS specs
 - `runtime-logs/` is the local bind-mounted log area for app and Kong logs
 - `CONTEXT.md` captures the working context for the repo
 - `deploy/observability/CONTEXT.md` captures the observability setup context
@@ -101,6 +104,30 @@ This is the OSS-friendly version of the production pattern:
 - Kong handles API gateway behavior
 
 If you later move to Kong Enterprise, you can choose to collapse more of the certificate-auth responsibility into Kong.
+
+## Internal Adapter Demo
+
+The first internal zero-trust slice is implemented with `adapter-dnb` and `mock-dnb-bank`.
+
+Current internal flow:
+
+- `psd2-gateway-app` calls `adapter-dnb` over HTTPS with mTLS
+- `adapter-dnb` validates the gateway certificate
+- `adapter-dnb` checks the caller DN and endpoint against `deploy/security/internal-access-policy.yml`
+- `adapter-dnb` calls `mock-dnb-bank` over HTTPS with mTLS
+- `mock-dnb-bank` validates the adapter certificate
+- `mock-dnb-bank` checks the caller DN and endpoint against `deploy/security/mock-dnb-access-policy.yml`
+- the gateway returns a canonical response body to the caller
+
+Gateway canonical endpoints:
+
+```bash
+curl -i http://localhost:8000/psd2/aspsps/dnb/accounts/summary
+curl -i http://localhost:8000/psd2/aspsps/dnb/accounts -H 'Consent-ID: CONSENT-STATIC-001'
+curl -i http://localhost:8000/psd2/aspsps/dnb/accounts/15030012345 -H 'Consent-ID: CONSENT-STATIC-001'
+curl -i http://localhost:8000/psd2/aspsps/dnb/accounts/15030012345/balances -H 'Consent-ID: CONSENT-STATIC-001'
+curl -i -X POST http://localhost:8000/psd2/aspsps/dnb/consents -H 'Content-Type: application/json' -H 'PSU-ID: demo-psu' -H 'TPP-Redirect-URI: https://tpp.local/callback' -d '{"access":{"accounts":[{"iban":"NO0015030012345"}],"balances":[{"iban":"NO0015030012345"}],"transactions":[{"iban":"NO0015030012345"}]},"recurringIndicator":true,"validUntil":"2026-12-31","frequencyPerDay":4,"combinedServiceIndicator":false}'
+```
 
 ## Live Logs
 

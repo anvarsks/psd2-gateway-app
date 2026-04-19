@@ -10,6 +10,31 @@ Run `psd2-gateway-app` behind Kong API Gateway as a production-like local POC wi
 - containerized local orchestration for end-to-end testing
 - optional Splunk-based observability for continuous log viewing and search
 
+## Planned Target Architecture
+
+The next planned evolution is to turn `psd2-gateway-app` into an aggregator that calls ASPSP-specific adapter services internally and always returns a unified common response format to the TPP.
+
+Planned internal adapter examples:
+
+- `adapter-dnb`
+- `adapter-nordea`
+- `adapter-tietoevry`
+
+Planned traffic path:
+
+- `TPP -> NGINX mTLS edge -> Kong -> psd2-gateway-app -> ASPSP adapter -> ASPSP`
+
+The gateway will own:
+
+- orchestration across adapters
+- canonical request and response mapping
+- unified error handling for TPP consumers
+
+The adapter services will own:
+
+- ASPSP-specific protocol and payload handling
+- transformation from ASPSP-specific formats into canonical gateway models
+
 ## Current Implementation
 
 - Framework: Spring Boot 3.2.5
@@ -27,6 +52,9 @@ Run `psd2-gateway-app` behind Kong API Gateway as a production-like local POC wi
 - Runtime: Docker Compose
 - Deployment assets live under: `deploy/`
 - Sample TPP client app lives under: `tpp-client-app/`
+- First ASPSP adapter lives under: `adapter-dnb/`
+- Mock DNB bank lives under: `mock-dnb-bank/`
+- Downloaded DNB specs live under: `aspsp specs/dnb/`
 
 ## API Details
 
@@ -62,6 +90,74 @@ NGINX validates the client certificate against the local CA before forwarding to
 For local development, certificate assets are generated under:
 
 `deploy/certs/generated/`
+
+## Planned Internal Zero-Trust Model
+
+The intended next security step is zero-trust service-to-service communication inside the provider network.
+
+Planned principle:
+
+- every internal service call is mutually authenticated with mTLS
+- every internal service is denied by default unless explicitly allowed by policy
+
+Planned internal callers and targets include:
+
+- `psd2-gateway-app -> adapter-dnb`
+- `psd2-gateway-app -> adapter-nordea`
+- `psd2-gateway-app -> adapter-tietoevry`
+
+Planned authorization input:
+
+- verified client certificate identity
+- endpoint path
+- HTTP method
+- centrally defined policy file
+
+Planned policy file:
+
+`deploy/security/internal-access-policy.yml`
+
+Planned policy intent:
+
+- identify the calling service by client DN or equivalent certificate identity
+- list the allowed adapter endpoints that caller may invoke
+- reject any unspecified service-to-service call
+
+## Implemented Internal DNB Slice
+
+The first internal DNB slice is now implemented with:
+
+- `adapter-dnb`
+- `mock-dnb-bank`
+- the downloaded DNB AIS spec under `aspsp specs/dnb/ais.yaml`
+
+Current internal flow:
+
+- `psd2-gateway-app -> adapter-dnb` over HTTPS with mTLS
+- `adapter-dnb` validates the gateway certificate
+- `adapter-dnb` enforces caller authorization using `deploy/security/internal-access-policy.yml`
+- `adapter-dnb -> mock-dnb-bank` over HTTPS with mTLS
+- `mock-dnb-bank` validates the adapter certificate
+- `mock-dnb-bank` enforces caller authorization using `deploy/security/mock-dnb-access-policy.yml`
+- `psd2-gateway-app` returns a canonical response object to the caller
+
+Implemented internal policy examples:
+
+- client DN `CN=psd2-gateway-app,O=PSD2 Gateway,C=NO`
+- may call the internal DNB consent and account endpoints on `adapter-dnb`
+- client DN `CN=adapter-dnb,O=Adapter DNB,C=NO`
+- may call the DNB-shaped `/v1` AIS endpoints on `mock-dnb-bank`
+
+Implemented public gateway endpoints:
+
+- `POST /api/v1/gateway/aspsps/dnb/consents`
+- `GET /api/v1/gateway/aspsps/dnb/consents/{consentId}`
+- `DELETE /api/v1/gateway/aspsps/dnb/consents/{consentId}`
+- `GET /api/v1/gateway/aspsps/dnb/consents/{consentId}/status`
+- `GET /api/v1/gateway/aspsps/dnb/accounts`
+- `GET /api/v1/gateway/aspsps/dnb/accounts/{accountNumber}`
+- `GET /api/v1/gateway/aspsps/dnb/accounts/{accountNumber}/balances`
+- `GET /api/v1/gateway/aspsps/dnb/accounts/summary`
 
 ## Gateway Behavior
 
@@ -144,6 +240,29 @@ Call the sample TPP app:
 curl -i http://localhost:8085/api/v1/tpp/gateway-status
 ```
 
+Call the first aggregator adapter endpoint:
+
+```bash
+curl -i http://localhost:8000/psd2/aspsps/dnb/accounts/summary
+```
+
+Create a DNB consent through the gateway:
+
+```bash
+curl -i -X POST http://localhost:8000/psd2/aspsps/dnb/consents \
+  -H 'Content-Type: application/json' \
+  -H 'PSU-ID: demo-psu' \
+  -H 'TPP-Redirect-URI: https://tpp.local/callback' \
+  -d '{"access":{"accounts":[{"iban":"NO0015030012345"}],"balances":[{"iban":"NO0015030012345"}],"transactions":[{"iban":"NO0015030012345"}]},"recurringIndicator":true,"validUntil":"2026-12-31","frequencyPerDay":4,"combinedServiceIndicator":false}'
+```
+
+Read DNB accounts through the gateway:
+
+```bash
+curl -i http://localhost:8000/psd2/aspsps/dnb/accounts \
+  -H 'Consent-ID: CONSENT-STATIC-001'
+```
+
 ## Expected Result
 
 - HTTP status: `200 OK`
@@ -188,3 +307,7 @@ The repo now also includes an OSS-friendly mTLS edge:
 - NGINX validates the TPP client certificate
 - Kong remains responsible for API gateway behavior
 - the sample `tpp-client-app` exercises the HTTPS client flow
+
+The next planned stage is internal zero-trust communication between `psd2-gateway-app` and future ASPSP adapter services, controlled by a YAML policy that maps caller certificate identity to allowed adapter endpoints.
+
+The first stage of that plan is now implemented with `adapter-dnb` and a YAML policy allowing only the gateway service DN to call the DNB summary endpoint.

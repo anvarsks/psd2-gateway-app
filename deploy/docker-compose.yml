@@ -6,8 +6,14 @@ services:
     container_name: psd2-gateway-app
     environment:
       APP_LOG_FILE: /var/log/psd2-gateway-app/application.log
+      INTERNAL_ADAPTER_DNB_BASE_URL: https://adapter-dnb:9443
+      INTERNAL_ADAPTER_DNB_KEY_STORE_PATH: /certs/gateway-client.p12
+      INTERNAL_ADAPTER_DNB_KEY_STORE_PASSWORD: changeit
+      INTERNAL_ADAPTER_DNB_TRUST_STORE_PATH: /certs/gateway-truststore.p12
+      INTERNAL_ADAPTER_DNB_TRUST_STORE_PASSWORD: changeit
     volumes:
       - ../runtime-logs/app:/var/log/psd2-gateway-app
+      - ./certs/generated:/certs:ro
     networks:
       - psd2-net
     healthcheck:
@@ -16,6 +22,49 @@ services:
       timeout: 5s
       retries: 5
       start_period: 25s
+
+  adapter-dnb:
+    build:
+      context: ../adapter-dnb
+      dockerfile: Dockerfile
+    container_name: adapter-dnb
+    depends_on:
+      - mock-dnb-bank
+    environment:
+      ADAPTER_LOG_FILE: /var/log/adapter-dnb/application.log
+      ADAPTER_DNB_KEY_STORE_PATH: /certs/adapter-dnb.p12
+      ADAPTER_DNB_KEY_STORE_PASSWORD: changeit
+      ADAPTER_DNB_TRUST_STORE_PATH: /certs/adapter-dnb-truststore.p12
+      ADAPTER_DNB_TRUST_STORE_PASSWORD: changeit
+      MOCK_DNB_BANK_BASE_URL: https://mock-dnb-bank:9444
+      MOCK_DNB_BANK_KEY_STORE_PATH: /certs/adapter-dnb.p12
+      MOCK_DNB_BANK_KEY_STORE_PASSWORD: changeit
+      MOCK_DNB_BANK_TRUST_STORE_PATH: /certs/adapter-dnb-truststore.p12
+      MOCK_DNB_BANK_TRUST_STORE_PASSWORD: changeit
+      INTERNAL_ACCESS_POLICY_PATH: /policy/internal-access-policy.yml
+    volumes:
+      - ./certs/generated:/certs:ro
+      - ./security:/policy:ro
+      - ../runtime-logs/adapter-dnb:/var/log/adapter-dnb
+    networks:
+      - psd2-net
+
+  mock-dnb-bank:
+    build:
+      context: ../mock-dnb-bank
+      dockerfile: Dockerfile
+    container_name: mock-dnb-bank
+    environment:
+      MOCK_DNB_BANK_KEY_STORE_PATH: /certs/mock-dnb-bank.p12
+      MOCK_DNB_BANK_KEY_STORE_PASSWORD: changeit
+      MOCK_DNB_BANK_TRUST_STORE_PATH: /certs/mock-dnb-bank-truststore.p12
+      MOCK_DNB_BANK_TRUST_STORE_PASSWORD: changeit
+      INTERNAL_ACCESS_POLICY_PATH: /policy/mock-dnb-access-policy.yml
+    volumes:
+      - ./certs/generated:/certs:ro
+      - ./security:/policy:ro
+    networks:
+      - psd2-net
 
   kong:
     image: kong:3.7
@@ -77,12 +126,14 @@ services:
     depends_on:
       - splunk
       - psd2-gateway-app
+      - adapter-dnb
       - kong
     environment:
       SPLUNK_HEC_TOKEN: ${SPLUNK_HEC_TOKEN:-psd2-hec-token}
     volumes:
       - ./observability/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
       - ../runtime-logs/app:/var/log/psd2-gateway-app:ro
+      - ../runtime-logs/adapter-dnb:/var/log/adapter-dnb:ro
       - ../runtime-logs/kong:/var/log/kong:ro
       - fluent-bit-state:/fluent-bit/state
     networks:

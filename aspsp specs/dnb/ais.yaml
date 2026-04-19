@@ -1,0 +1,5464 @@
+openapi: 3.0.0
+info:
+  description: DNB PSD2 API documentation
+  version: v1
+  title: DNB PSD2 API documentation
+tags:
+  - name: Account Information Service (AIS)
+paths:
+  /accounts:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: Read Account List
+      operationId: getAccountListUsingGET
+      parameters:
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+        - name: Consent-ID
+          in: header
+          description: Consent-ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/AccountList'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /accounts/{accountNumber}:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: Read Account Details
+      operationId: readAccountDetailsUsingGET
+      parameters:
+        - name: accountNumber
+          in: path
+          description: Account number
+          required: true
+          schema:
+            type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+        - name: Consent-ID
+          in: header
+          description: Consent-ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/AccountDetails'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /accounts/{accountNumber}/balances:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: Read Balance
+      operationId: getBalancesUsingGET
+      parameters:
+        - name: accountNumber
+          in: path
+          description: Account number
+          required: true
+          schema:
+            type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+        - name: Consent-ID
+          in: header
+          description: Consent-ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/GetAccountBalancesResponse'
+        '400':
+          description: Invalid arguments
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Account (or user) not found
+  /accounts/{accountNumber}/transactions:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: Read transaction list of an account
+      operationId: getTransactionListUsingGET
+      parameters:
+        - name: accountNumber
+          in: path
+          description: Account number
+          required: true
+          schema:
+            type: string
+        - name: dateFrom
+          in: query
+          description: >-
+            From date, format: yyyy-MM-dd. If left blank, it will be set to 30
+            days before the beginning of the date range, which will be dateTo if
+            specified, or the current date otherwise.
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          description: >-
+            To date, format: yyyy-MM-dd. If left blank, it will be set to the
+            current date.
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: pageId
+          in: query
+          description: Page ID
+          required: false
+          schema:
+            type: string
+        - name: bookingStatus
+          in: query
+          description: Booking status
+          required: true
+          schema:
+            type: string
+            enum:
+              - booked
+              - pending
+              - both
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+        - name: Consent-ID
+          in: header
+          description: Consent-ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/GetAccountTransactionsResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /accounts/{accountNumber}/transactions/{transactionId}:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: Read details of a transaction
+      operationId: getTransactionDetailsUsingGET
+      parameters:
+        - name: accountNumber
+          in: path
+          description: Account number
+          required: true
+          schema:
+            type: string
+        - name: transactionId
+          in: path
+          description: Transaction id
+          required: true
+          schema:
+            type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+        - name: Consent-ID
+          in: header
+          description: Consent-ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/TransactionDetails'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /card-accounts:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: List all card accounts
+      operationId: getCardAccountsInformationUsingGET
+      parameters:
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: TPP-Redirect-Preferred
+          in: header
+          description: TPP-Redirect-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: TPP-Redirect-URI
+          in: header
+          description: TPP-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Nok-Redirect-URI
+          in: header
+          description: TPP-Nok-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Explicit-Authorisation-Preferred
+          in: header
+          description: TPP-Explicit-Authorisation-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+        - name: Consent-ID
+          in: header
+          description: Consent-ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CardAccountList'
+        '400':
+          description: Bad Request
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TppMessageGeneric'
+        '401':
+          description: Unauthorized
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TppMessageGeneric'
+        '403':
+          description: Forbidden
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TppMessageGeneric'
+        '404':
+          description: Not found
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TppMessageGeneric'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TppMessageGeneric'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TppMessageGeneric'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TppMessageGeneric'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TppMessageGeneric'
+  /card-accounts/{accountNumber}:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: Reads details about a card account
+      operationId: getCardAccountDetailsUsingGET
+      parameters:
+        - name: accountNumber
+          in: path
+          description: accountNumber
+          required: true
+          schema:
+            type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: TPP-Redirect-Preferred
+          in: header
+          description: TPP-Redirect-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: TPP-Redirect-URI
+          in: header
+          description: TPP-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Nok-Redirect-URI
+          in: header
+          description: TPP-Nok-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Explicit-Authorisation-Preferred
+          in: header
+          description: TPP-Explicit-Authorisation-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+        - name: Consent-ID
+          in: header
+          description: Consent-ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CardAccountDetails'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /card-accounts/{accountNumber}/balances:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: Read card account balances
+      operationId: getCardAccountsBalancesUsingGET
+      parameters:
+        - name: accountNumber
+          in: path
+          description: accountNumber
+          required: true
+          schema:
+            type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: TPP-Redirect-Preferred
+          in: header
+          description: TPP-Redirect-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: TPP-Redirect-URI
+          in: header
+          description: TPP-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Nok-Redirect-URI
+          in: header
+          description: TPP-Nok-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Explicit-Authorisation-Preferred
+          in: header
+          description: TPP-Explicit-Authorisation-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+        - name: Consent-ID
+          in: header
+          description: Consent-ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CardAccountBalancesResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /card-accounts/{accountNumber}/transactions:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: Read transaction list of a card account
+      operationId: getCardAccountsTransactionsUsingGET
+      parameters:
+        - name: accountNumber
+          in: path
+          description: accountNumber
+          required: true
+          schema:
+            type: string
+        - name: dateFrom
+          in: query
+          description: >-
+            From date, format: yyyy-MM-dd. If left blank, it will be set to
+            today - 30 days.
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          description: 'To date, format: yyyy-MM-dd. If left blank, it will be set to today.'
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: entryReferenceFrom
+          in: query
+          description: entryReferenceFrom
+          required: false
+          schema:
+            type: string
+        - name: bookingStatus
+          in: query
+          description: bookingStatus
+          required: false
+          schema:
+            type: string
+            enum:
+              - booked
+              - pending
+              - both
+            default: BOOKED
+        - name: deltaList
+          in: query
+          description: deltaList
+          required: false
+          schema:
+            type: boolean
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: TPP-Redirect-Preferred
+          in: header
+          description: TPP-Redirect-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: TPP-Redirect-URI
+          in: header
+          description: TPP-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Nok-Redirect-URI
+          in: header
+          description: TPP-Nok-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Explicit-Authorisation-Preferred
+          in: header
+          description: TPP-Explicit-Authorisation-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+        - name: Consent-ID
+          in: header
+          description: Consent-ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CardAccountsTransactionsResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /consents:
+    post:
+      tags:
+        - Account Information Service (AIS)
+      summary: Create consent.
+      operationId: createConsentUsingPOST
+      parameters:
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: TPP-Redirect-Preferred
+          in: header
+          description: TPP-Redirect-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: TPP-Redirect-URI
+          in: header
+          description: TPP-Redirect-URI
+          required: true
+          schema:
+            type: string
+        - name: TPP-Nok-Redirect-URI
+          in: header
+          description: TPP-Nok-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Explicit-Authorisation-Preferred
+          in: header
+          description: TPP-Explicit-Authorisation-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: PSU-ID
+          in: header
+          description: PSU-ID
+          required: true
+          schema:
+            type: string
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateConsent'
+        description: createConsent
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CreateConsentResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /consents/{consentId}:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: Get consent.
+      operationId: getConsentUsingGET
+      parameters:
+        - name: consentId
+          in: path
+          description: consentId
+          required: true
+          schema:
+            type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: TPP-Redirect-Preferred
+          in: header
+          description: TPP-Redirect-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: TPP-Redirect-URI
+          in: header
+          description: TPP-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Nok-Redirect-URI
+          in: header
+          description: TPP-Nok-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Explicit-Authorisation-Preferred
+          in: header
+          description: TPP-Explicit-Authorisation-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: PSU-ID
+          in: header
+          description: PSU-ID
+          required: true
+          schema:
+            type: string
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/GetConsentResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - Account Information Service (AIS)
+      summary: Delete consent.
+      operationId: deleteConsentUsingDELETE
+      parameters:
+        - name: consentId
+          in: path
+          description: consentId
+          required: true
+          schema:
+            type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: TPP-Redirect-Preferred
+          in: header
+          description: TPP-Redirect-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: TPP-Redirect-URI
+          in: header
+          description: TPP-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Nok-Redirect-URI
+          in: header
+          description: TPP-Nok-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Explicit-Authorisation-Preferred
+          in: header
+          description: TPP-Explicit-Authorisation-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: PSU-ID
+          in: header
+          description: PSU-ID
+          required: true
+          schema:
+            type: string
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /consents/{consentId}/status:
+    get:
+      tags:
+        - Account Information Service (AIS)
+      summary: Get consent status.
+      operationId: getConsentStatusUsingGET
+      parameters:
+        - name: consentId
+          in: path
+          description: consentId
+          required: true
+          schema:
+            type: string
+        - name: X-Request-ID
+          in: header
+          description: X-Request-ID
+          required: true
+          schema:
+            type: string
+        - name: TPP-Redirect-Preferred
+          in: header
+          description: TPP-Redirect-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: TPP-Redirect-URI
+          in: header
+          description: TPP-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Nok-Redirect-URI
+          in: header
+          description: TPP-Nok-Redirect-URI
+          required: false
+          schema:
+            type: string
+        - name: TPP-Explicit-Authorisation-Preferred
+          in: header
+          description: TPP-Explicit-Authorisation-Preferred
+          required: false
+          schema:
+            type: boolean
+        - name: PSU-ID
+          in: header
+          description: PSU-ID
+          required: true
+          schema:
+            type: string
+        - name: PSU-IP-Address
+          in: header
+          description: PSU-IP-Address
+          required: false
+          schema:
+            type: string
+        - name: PSU-IP-Port
+          in: header
+          description: PSU-IP-Port
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept
+          in: header
+          description: PSU-Accept
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Charset
+          in: header
+          description: PSU-Accept-Charset
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Encoding
+          in: header
+          description: PSU-Accept-Encoding
+          required: false
+          schema:
+            type: string
+        - name: PSU-Accept-Language
+          in: header
+          description: PSU-Accept-Language
+          required: false
+          schema:
+            type: string
+        - name: PSU-User-Agent
+          in: header
+          description: PSU-User-Agent
+          required: false
+          schema:
+            type: string
+        - name: PSU-Http-Method
+          in: header
+          description: PSU-Http-Method
+          required: false
+          schema:
+            type: string
+            enum:
+              - GET
+              - HEAD
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+              - TRACE
+        - name: PSU-Device-ID
+          in: header
+          description: PSU-Device-ID
+          required: false
+          schema:
+            type: string
+        - name: PSU-Geo-Location
+          in: header
+          description: PSU-Geo-Location
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ConsentStatusResponse'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+servers:
+  - url: /v1
+components:
+  schemas:
+    AccountDetails:
+      type: object
+      required:
+        - currency
+      properties:
+        _links:
+          $ref: '#/components/schemas/LinksAccountDetails'
+        balances:
+          type: array
+          description: Get balances
+          items:
+            $ref: '#/components/schemas/Balance'
+        bban:
+          type: string
+          description: >-
+            Basic Bank Account Number (BBAN) Identifier  This data element can
+            be used in the body of the Consent Request Message for retrieving
+            Account access Consent from this Account. This data elements is used
+            for payment Accounts which have no IBAN. ISO20022: Basic Bank
+            Account Number (BBAN). Identifier used nationally by financial
+            institutions, i.e., in individual countries, generally as part of a
+            National Account Numbering Scheme(s), which uniquely identifies the
+            account of a customer.
+          pattern: '[a-zA-Z0-9]{1,30}'
+        bic:
+          type: string
+          description: 'BICFI '
+          pattern: '[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}'
+        currency:
+          type: string
+          description: 'ISO 4217 Alpha 3 currency code '
+        iban:
+          type: string
+          description: IBAN of an account
+          pattern: '[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}'
+        name:
+          type: string
+          description: Name of the account given by the bank or the PSU in online-banking.
+          minLength: 0
+          maxLength: 35
+        ownerName:
+          type: string
+          description: Name of the legal account owner.
+          minLength: 0
+          maxLength: 140
+        status:
+          type: string
+          description: Get status
+          enum:
+            - enabled
+            - deleted
+            - blocked
+        usage:
+          type: string
+          description: >-
+            Specifies the usage of the account   * PRIV: private personal
+            account   * ORGA: professional account
+          minLength: 0
+          maxLength: 4
+          enum:
+            - PRIV
+            - ORGA
+      title: AccountDetails
+      description: "The ASPSP shall give at least one of the account reference identifiers:\n\t- iban\n\t- bban\n\t- pan\n\t- maskedPan\n\t- msisdn\nIf the account is a multicurrency account currency code in \"currency\" is set to \"XXX\"."
+      referenceName: AccountDetails
+    AccountList:
+      type: object
+      required:
+        - accounts
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountDetails'
+      title: AccountList
+      description: 'List of accounts with details. '
+      referenceName: AccountList
+    AccountReference:
+      type: object
+      properties:
+        bban:
+          type: string
+          description: >-
+            Basic Bank Account Number (BBAN) Identifier  This data element can
+            be used in the body of the Consent Request Message for retrieving
+            Account access Consent from this Account. This data elements is used
+            for payment Accounts which have no IBAN. ISO20022: Basic Bank
+            Account Number (BBAN). Identifier used nationally by financial
+            institutions, i.e., in individual countries, generally as part of a
+            National Account Numbering Scheme(s), which uniquely identifies the
+            account of a customer.
+          pattern: '[a-zA-Z0-9]{1,30}'
+        currency:
+          type: string
+          description: ISO 4217 Alpha 3 currency code
+        iban:
+          type: string
+          description: IBAN of an account
+          pattern: ^[A-Z]{2,2}[0-9]{2,2}[a-zA-Z0-9]{1,30}
+        maskedPan:
+          type: string
+          description: Masked Primary Account Number
+          minLength: 0
+          maxLength: 35
+        msisdn:
+          type: string
+          description: Mobile phone number.
+        pan:
+          type: string
+          description: Primary Account Number according to ISO/IEC 7812.
+          minLength: 0
+          maxLength: 35
+      title: AccountReference
+      description: "Reference to an account by either\n\t* IBAN, of a payment accounts, or\n\t* BBAN, for payment accounts if there is no IBAN, or\n\t* the Primary Account Number (PAN) of a card, can be tokenised by the ASPSP due to PCI DSS requirements, or\n\t* the Primary Account Number (PAN) of a card in a masked form, or\n\t* an alias to access a payment account via a registered mobile phone number (MSISDN)."
+      referenceName: AccountReference
+    AccountReport:
+      type: object
+      required:
+        - links
+      properties:
+        booked:
+          type: array
+          description: Get booked
+          items:
+            $ref: '#/components/schemas/TransactionDetails'
+        links:
+          type: object
+          description: Get links
+          additionalProperties:
+            $ref: '#/components/schemas/HrefType'
+        pending:
+          type: array
+          description: Get pending
+          items:
+            $ref: '#/components/schemas/TransactionDetails'
+      title: AccountReport
+      description: >-
+        JSON based account report. This account report contains transactions
+        resulting from the query parameters.
+
+        'booked' shall be contained if bookingStatus parameter is set to
+        "booked" or "both".
+
+        'pending' is not contained if the bookingStatus parameter is set to
+        "booked". 
+      referenceName: AccountReport
+    Address:
+      type: object
+      required:
+        - country
+      properties:
+        buildingNumber:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+          description: ISO 3166 ALPHA2 country code
+          pattern: '[A-Z]{2}'
+        postalCode:
+          type: string
+        street:
+          type: string
+          minLength: 0
+          maxLength: 70
+      title: Address
+      description: Address
+      referenceName: Address
+    AisAgreementStatusChangeReq:
+      type: object
+      required:
+        - userId
+      properties:
+        aisLicenseIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+        enable:
+          type: boolean
+        userId:
+          type: string
+        valid:
+          type: boolean
+      title: AisAgreementStatusChangeReq
+    AisAgreementStatusChangeResponse:
+      type: object
+      properties:
+        modified:
+          type: boolean
+      title: AisAgreementStatusChangeResponse
+    Amount:
+      type: object
+      required:
+        - amount
+        - currency
+      properties:
+        amount:
+          type: string
+          description: "The amount given with fractional digits, where fractions must be compliant to the currency definition. Up to 14 significant figures. Negative amounts are signed by minus. The decimal separator is a dot.  **Example:** Valid representations for EUR with up to two decimals are:\n\t* 1056\n\t* 5768.2\n\t* -1.50\n\t* 5877.78"
+          pattern: '-?[0-9]{1,14}(\.[0-9]{1,3})?'
+        currency:
+          type: string
+          description: ISO 4217 Alpha 3 currency code
+      title: Amount
+      description: Amount
+      referenceName: Amount
+    AuthenticationObject:
+      type: object
+      required:
+        - authenticationMethodId
+        - authenticationType
+      properties:
+        authenticationMethodId:
+          type: string
+          description: >-
+            An identification provided by the ASPSP for the later identification
+            of the authentication method selection.
+          minLength: 0
+          maxLength: 35
+        authenticationType:
+          type: string
+          enum:
+            - SMS_OTP
+            - CHIP_OTP
+            - PHOTO_OTP
+            - PUSH_OTP
+        authenticationVersion:
+          type: string
+          description: >-
+            Depending on the "authenticationType". This version can be used by
+            differentiating authentication tools used within  performing OTP
+            generation in the same authentication type. This version can be
+            referred to in the ASPSPs documentation.
+        explanation:
+          type: string
+          description: Detailed information about the SCA method for the PSU.
+        name:
+          type: string
+          description: >-
+            This is the name of the authentication method defined by the PSU in
+            the Online Banking frontend of the ASPSP. Alternatively this could
+            be a description provided by the ASPSP like "SMS OTP on phone
+            +49160xxxxx 28". This name shall be used by the TPP when presenting
+            a list of authentication methods to the PSU, if available. 
+      title: AuthenticationObject
+      description: Authentication Object
+      referenceName: AuthenticationObject
+    AuthenticationStatus:
+      type: object
+      properties:
+        authResult:
+          type: string
+          enum:
+            - Ok
+            - Failed
+            - NoAccess
+            - TechnicalError
+        blob:
+          type: string
+        message:
+          type: string
+      title: AuthenticationStatus
+    Balance:
+      type: object
+      required:
+        - balanceAmount
+        - balanceType
+      properties:
+        balanceAmount:
+          $ref: '#/components/schemas/Amount'
+        balanceType:
+          type: string
+          enum:
+            - closingBooked
+            - expected
+            - authorised
+            - openingBooked
+            - interimAvailable
+            - forwardAvailable
+            - nonInvoiced
+        lastChangeDateTime:
+          type: string
+          format: date-time
+          description: >-
+            This data element might be used to indicate e.g. with the expected
+            or booked balance that no action is known  on the account, which is
+            not yet booked.
+        lastCommittedTransaction:
+          type: string
+          description: >-
+            "entryReference" of the last commited transaction to support the TPP
+            in identifying whether all  PSU transactions are already known.
+          minLength: 0
+          maxLength: 35
+        referenceDate:
+          type: string
+          format: date
+          description: Reference date of the balance
+      title: Balance
+      description: 'A single balance element '
+      referenceName: Balance
+    CardAccountBalancesResponse:
+      type: object
+      required:
+        - balances
+        - cardAccount
+      properties:
+        balances:
+          type: array
+          description: balances
+          items:
+            $ref: '#/components/schemas/Balance'
+        cardAccount:
+          $ref: '#/components/schemas/AccountReference'
+      title: CardAccountBalancesResponse
+      referenceName: CardAccountBalancesResponse
+    CardAccountDetails:
+      type: object
+      required:
+        - currency
+        - maskedPan
+      properties:
+        _links:
+          $ref: '#/components/schemas/LinksAccountDetails'
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+        creditLimit:
+          $ref: '#/components/schemas/Amount'
+        currency:
+          type: string
+          description: 'ISO 4217 Alpha 3 currency code '
+          pattern: '[A-Z]{3}'
+        details:
+          type: string
+          description: >-
+            Specifications that might be provided by the ASPSP   -
+            characteristics of the account   - characteristics of the relevant
+            card 
+          minLength: 0
+          maxLength: 140
+        maskedPan:
+          type: string
+          description: 'Masked Primary Account Number '
+          minLength: 0
+          maxLength: 35
+        name:
+          type: string
+          description: Name of the account given by the bank or the PSU in online-banking.
+          minLength: 0
+          maxLength: 35
+        ownerName:
+          type: string
+          description: Name of the legal account owner.
+          minLength: 0
+          maxLength: 140
+        product:
+          type: string
+          description: Product name of the bank for this account, proprietary definition.
+          minLength: 0
+          maxLength: 35
+        resourceId:
+          type: string
+          description: >-
+            This is the data element to be used in the path when retrieving data
+            from a dedicated account. This shall be filled, if addressable
+            resource are created by the ASPSP on the /card-accounts endpoint. 
+        status:
+          type: string
+          enum:
+            - enabled
+            - deleted
+            - blocked
+        usage:
+          type: string
+          description: >-
+            Specifies the usage of the account   * PRIV: private personal
+            account   * ORGA: professional account 
+          minLength: 0
+          maxLength: 4
+          enum:
+            - PRIV
+            - ORGA
+      title: CardAccountDetails
+      description: 'Card account details '
+      referenceName: CardAccountDetails
+    CardAccountList:
+      type: object
+      required:
+        - cardAccounts
+      properties:
+        cardAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardAccountDetails'
+      title: CardAccountList
+      referenceName: CardAccountList
+    CardAccountsTransactionsResponse:
+      type: object
+      properties:
+        _links:
+          type: object
+          additionalProperties:
+            type: string
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+        cardAccount:
+          $ref: '#/components/schemas/AccountReference'
+        cardTransactions:
+          $ref: '#/components/schemas/CardTransactions'
+      title: CardAccountsTransactionsResponse
+      referenceName: CardAccountsTransactionsResponse
+    CardTransaction:
+      type: object
+      properties:
+        bookingDate:
+          type: string
+          format: date
+        originalAmount:
+          $ref: '#/components/schemas/Amount'
+        transactionAmount:
+          $ref: '#/components/schemas/Amount'
+        transactionDate:
+          type: string
+          format: date
+        transactionDetails:
+          type: string
+      title: CardTransaction
+      referenceName: CardTransaction
+    CardTransactions:
+      type: object
+      properties:
+        booked:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardTransaction'
+        pending:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardTransaction'
+      title: CardTransactions
+      referenceName: CardTransactions
+    ChallengeData:
+      type: object
+      properties:
+        additionalInformation:
+          type: string
+          description: >-
+            Additional explanation for the PSU to explain e.g. fallback
+            mechanism for the chosen SCA method. The TPP is obliged to show this
+            to the PSU. 
+        data:
+          type: string
+          description: String challenge data
+        image:
+          type: string
+          format: byte
+          description: >-
+            PNG data (max. 512 kilobyte) to be displayed to the PSU, Base64
+            encoding, cp. [RFC4648]. This attribute is used only, when PHOTO_OTP
+            or CHIP_OTP is the selected SCA method. 
+        imageLink:
+          type: string
+          description: >-
+            A link where the ASPSP will provides the challenge image for the
+            TPP.
+        otpFormat:
+          type: string
+          description: >-
+            The format type of the OTP to be typed in. The admitted values are
+            "characters" or "integer".
+          enum:
+            - characters
+            - integer
+        otpMaxLength:
+          type: integer
+          format: int32
+          description: The maximal length for the OTP to be typed in by the PSU.
+      title: ChallengeData
+      description: >-
+        It is contained in addition to the data element 'chosenScaMethod' if
+        challenge data is needed for SCA. In rare cases this attribute is also
+        used in the context of the 'startAuthorisationWithPsuAuthentication'
+        link. 
+      referenceName: ChallengeData
+    CisInputRequest:
+      type: object
+      required:
+        - account
+        - instructedAmount
+      properties:
+        account:
+          $ref: '#/components/schemas/AccountReference'
+        cardNumber:
+          type: string
+          description: Card Number of the card issued by the PIISP.
+          minLength: 1
+          maxLength: 35
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        payee:
+          type: string
+          description: >-
+            The merchant where the card is accepted as an information to the
+            PSU.
+          minLength: 0
+          maxLength: 70
+      title: CisInputRequest
+    CisResponse:
+      type: object
+      properties:
+        fundsAvailable:
+          type: boolean
+      title: CisResponse
+    ConsentAccess:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsentAccount'
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsentAccount'
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsentAccount'
+      title: ConsentAccess
+      referenceName: ConsentAccess
+    ConsentAccount:
+      type: object
+      properties:
+        bban:
+          type: string
+        iban:
+          type: string
+      title: ConsentAccount
+      referenceName: ConsentAccount
+    ConsentStatusResponse:
+      type: object
+      properties:
+        consentStatus:
+          type: string
+      title: ConsentStatusResponse
+      referenceName: ConsentStatusResponse
+    CreateConsent:
+      type: object
+      required:
+        - access
+        - combinedServiceIndicator
+        - frequencyPerDay
+        - recurringIndicator
+        - validUntil
+      properties:
+        access:
+          $ref: '#/components/schemas/ConsentAccess'
+        combinedServiceIndicator:
+          type: boolean
+          description: >-
+            If "true" indicates that a payment initiation service will be
+            addressed in the same "session"
+        frequencyPerDay:
+          type: integer
+          format: int32
+          description: >-
+            How many requests per day you can call this service without needing
+            strong customer authentication. Max: 4
+        recurringIndicator:
+          type: boolean
+          description: |-
+            "true", if the consent is for recurring access to the account data.
+             "false", if the consent is for one access to the account data
+        validUntil:
+          type: string
+          format: date
+          description: 'Expire date for consent. example: 2018-01-11'
+      title: CreateConsent
+      referenceName: CreateConsent
+    CreateConsentResponse:
+      type: object
+      properties:
+        _links:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/HrefType'
+        consentId:
+          type: string
+        consentStatus:
+          type: string
+      title: CreateConsentResponse
+      referenceName: CreateConsentResponse
+    CreateUkBacsRequest:
+      type: object
+      required:
+        - creditorAccount
+        - creditorAgent
+        - creditorName
+        - debtorAccount
+        - instructedAmount
+        - requestedExecutionDate
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAddress:
+          $ref: '#/components/schemas/Address'
+        creditorAgent:
+          type: string
+          pattern: '[0-9]{6}'
+        creditorName:
+          type: string
+          description: creditorName
+          minLength: 0
+          maxLength: 35
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        ownReference:
+          type: string
+          minLength: 0
+          maxLength: 16
+        remittanceInformationStructured:
+          $ref: '#/components/schemas/RemittanceInformationStructured'
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+          minLength: 0
+          maxLength: 18
+        requestedExecutionDate:
+          type: string
+          format: date
+      title: CreateUkBacsRequest
+    CreateUkChapsRequest:
+      type: object
+      required:
+        - creditorAccount
+        - creditorAgent
+        - creditorName
+        - debtorAccount
+        - instructedAmount
+        - requestedExecutionDate
+      properties:
+        creditor:
+          $ref: '#/components/schemas/CreditorUkChaps'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAddress:
+          $ref: '#/components/schemas/Address'
+        creditorAgent:
+          type: string
+          pattern: '[0-9]{6}'
+        creditorName:
+          type: string
+          description: creditorName
+          minLength: 0
+          maxLength: 35
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        ownReference:
+          type: string
+          minLength: 0
+          maxLength: 16
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+        requestedExecutionDate:
+          type: string
+          format: date
+      title: CreateUkChapsRequest
+    CreditorDetailsSEDomTransfer:
+      type: object
+      required:
+        - reference
+      properties:
+        addressLine1:
+          type: string
+          description: addressLine1 can be set if advice==true, and then it is mandatory
+          minLength: 0
+          maxLength: 35
+        addressLine2:
+          type: string
+          description: addressLine2 can only be set if advice==true
+          minLength: 0
+          maxLength: 35
+        advice:
+          type: boolean
+          description: >-
+            If advice is added, various extra info can be added to payment. May
+            incurr additional charge. Ref the banks price list
+        city:
+          type: string
+          description: city can be set if advice==true, and then it is mandatory
+          minLength: 0
+          maxLength: 29
+        countryCode:
+          type: string
+          description: 2 char iso country code. can only be set if advice==true
+          minLength: 0
+          maxLength: 2
+        name:
+          type: string
+          description: Creditor name can be set if advice==true, and then it is mandatory
+          minLength: 0
+          maxLength: 35
+        postCode:
+          type: string
+          description: postCode can be set if advice==true, and then it is mandatory
+          minLength: 4
+          maxLength: 5
+        reference:
+          type: string
+          description: Beneficiary reference; max 30 chars
+          minLength: 0
+          maxLength: 30
+        saveDetails:
+          type: boolean
+          description: Save beneficiary details in internet bank
+      title: CreditorDetailsSEDomTransfer
+      description: Sweden domestic transfer Creditor info.
+      referenceName: CreditorDetailsSEDomTransfer
+    CreditorSeBgPg:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 0
+          maxLength: 9
+          pattern: '[0-9]+'
+        name:
+          type: string
+          minLength: 0
+          maxLength: 30
+        saveDetails:
+          type: boolean
+      title: CreditorSeBgPg
+      referenceName: CreditorSeBgPg
+    CreditorUkChaps:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Creditor id, max chars=20
+          minLength: 0
+          maxLength: 20
+        saveDetails:
+          type: boolean
+          description: Save creditor details in internet bank - boolean
+      title: CreditorUkChaps
+      description: Creditor for Uk chaps
+      referenceName: CreditorUkChaps
+    Debtor:
+      type: object
+      properties:
+        ownReference:
+          type: string
+          minLength: 0
+          maxLength: 30
+      title: Debtor
+      referenceName: Debtor
+    DkFiGiroPaymentRequest:
+      type: object
+      required:
+        - creditorAccount
+        - creditorName
+        - debtorAccount
+        - instructedAmount
+        - requestedExecutionDate
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAddress:
+          $ref: '#/components/schemas/Address'
+        creditorAgent:
+          type: string
+          description: creditorAgent
+        creditorName:
+          type: string
+          description: creditorName
+          minLength: 0
+          maxLength: 75
+        debtor:
+          $ref: '#/components/schemas/Debtor'
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorAgent:
+          type: string
+        debtorName:
+          type: string
+          description: debtorName
+          minLength: 0
+          maxLength: 75
+        endToEndIdentification:
+          type: string
+          description: endToEndIdentification
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        remittanceInformation:
+          $ref: '#/components/schemas/RemittanceInformationFIGiro'
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+        requestedExecutionDate:
+          type: string
+          format: date
+        saveDetails:
+          type: boolean
+          description: Save creditor details in internet bank
+      title: DkFiGiroPaymentRequest
+      description: Payment initiation for a credit transfer
+    DkStandardTransferRequest:
+      type: object
+      required:
+        - creditorAccount
+        - creditorName
+        - debtorAccount
+        - instructedAmount
+        - requestedExecutionDate
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAddress:
+          $ref: '#/components/schemas/Address'
+        creditorAgent:
+          type: string
+          description: creditorAgent
+        creditorName:
+          type: string
+          description: creditorName
+          minLength: 0
+          maxLength: 75
+        debtor:
+          $ref: '#/components/schemas/Debtor'
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorAgent:
+          type: string
+          description: debtorAgent
+        debtorName:
+          type: string
+          description: debtorName
+          minLength: 0
+          maxLength: 75
+        endToEndIdentification:
+          type: string
+          description: endToEndIdentification
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        remittanceInformation:
+          $ref: '#/components/schemas/RemittanceInformationDkStdCreditTransfer'
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+        repeatInformation:
+          $ref: '#/components/schemas/PaymentFrequency'
+        requestedExecutionDate:
+          type: string
+          format: date
+        saveDetails:
+          type: boolean
+          description: Save creditor details in internet bank
+        supplierId:
+          type: string
+          description: 'Supplier id, original: Leverandør nummer'
+          minLength: 0
+          maxLength: 20
+      title: DkStandardTransferRequest
+      description: Payment initiation for a credit transfer
+    DnbInternalTransferRequest:
+      type: object
+      required:
+        - creditorAccount
+        - debtorAccount
+        - instructedAmount
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorName:
+          type: string
+          description: creditorName
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+        requestedExecutionDate:
+          type: string
+          format: date
+          description: requestedExecutionDate
+      title: DnbInternalTransferRequest
+      description: Payment initiation for a DNB internal credit transfer
+    Error:
+      type: object
+      properties:
+        links:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/HrefType'
+        tppMessages:
+          type: array
+          items:
+            $ref: '#/components/schemas/TppMessageGeneric'
+      title: Error
+      description: >-
+        NextGenPSD2 specific definition of reporting error information in case
+        of an HTTP error code.
+    GetAccountBalancesResponse:
+      type: object
+      required:
+        - balances
+      properties:
+        account:
+          $ref: '#/components/schemas/AccountReference'
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+      title: GetAccountBalancesResponse
+      description: >-
+        Body of the response for a successful read balance for an account
+        request.
+      referenceName: GetAccountBalancesResponse
+    GetAccountTransactionsResponse:
+      type: object
+      properties:
+        account:
+          $ref: '#/components/schemas/AccountReference'
+        balances:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+        links:
+          $ref: '#/components/schemas/LinksTransactionsPagination'
+        transactions:
+          $ref: '#/components/schemas/AccountReport'
+      title: GetAccountTransactionsResponse
+      description: >-
+        Body of the JSON response for a successful read transaction list
+        request. This account report contains transactions resulting from the
+        query parameters. 
+      referenceName: GetAccountTransactionsResponse
+    GetConsentResponse:
+      type: object
+      properties:
+        _links:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/HrefType'
+        access:
+          $ref: '#/components/schemas/ConsentAccess'
+        consentStatus:
+          type: string
+          description: This is the overall lifecycle status of the consent.
+        frequencyPerDay:
+          type: integer
+          format: int32
+          description: >-
+            How many requests per day you can call this service without needing
+            strong customer authentication. Max: 5
+        lastActionDate:
+          type: string
+          format: date-time
+          description: >-
+            This date is containing the date of the last action on the consent
+            object either through the XS2A interface or the PSU/ASPSP interface
+            having an impact on the status.
+        recurringIndicator:
+          type: boolean
+          description: decides if the consent is for recurring access to the account data
+        validUntil:
+          type: string
+          format: date
+          description: >-
+            This parameter is requesting a valid until date for the requested
+            consent
+      title: GetConsentResponse
+      referenceName: GetConsentResponse
+    GetPersonAisLicenseResponse:
+      type: object
+      properties:
+        aisLicenseInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonAisLicense'
+      title: GetPersonAisLicenseResponse
+    GetTppResponse:
+      type: object
+      properties:
+        tppLicenseInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/TppLicenseInfo'
+      title: GetTppResponse
+    HrefType:
+      type: object
+      properties:
+        href:
+          type: string
+          description: Link to a resource
+      title: HrefType
+      description: Link to a resource
+      referenceName: HrefType
+    InternalTransferPaymentRequest:
+      type: object
+      required:
+        - creditorAgent
+        - debtorAgent
+        - instructedAmount
+        - requestedExecutionDate
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAgent:
+          type: string
+          description: Swift Address / Bic for creditor
+          pattern: '[a-zA-Z0-9]+'
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorAgent:
+          type: string
+          description: Swift Address / Bic for debtor
+          pattern: '[a-zA-Z0-9]+'
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        ownReference:
+          type: string
+          description: Self reference for the user
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+        requestedExecutionDate:
+          type: string
+          format: date
+          description: Payment Execution date should be in 'yyyy-MM-dd' format
+      title: InternalTransferPaymentRequest
+      description: Payment initiation for corporate Intragroup transfer
+    LinksAccountDetails:
+      type: object
+      properties:
+        balances:
+          $ref: '#/components/schemas/HrefType'
+        transactions:
+          $ref: '#/components/schemas/HrefType'
+      title: LinksAccountDetails
+      description: >-
+        Links to the account, which can be directly used for retrieving account
+        information from this dedicated account. Links to "balances" and/or
+        "transactions" These links are only supported, when the corresponding
+        consent has been already granted.
+      referenceName: LinksAccountDetails
+    LinksConsents:
+      type: object
+      properties:
+        scaRedirect:
+          $ref: '#/components/schemas/HrefType'
+        scaStatus:
+          $ref: '#/components/schemas/HrefType'
+      title: LinksConsents
+      referenceName: LinksConsents
+    LinksPaymentInitiation:
+      type: object
+      properties:
+        scaOAuth:
+          $ref: '#/components/schemas/HrefType'
+        scaRedirect:
+          $ref: '#/components/schemas/HrefType'
+        scaStatus:
+          $ref: '#/components/schemas/HrefType'
+        self:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisation:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisationWithAuthenticationMethodSelection:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisationWithPsuAuthentication:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisationWithPsuIdentification:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisationWithTransactionAuthorisation:
+          $ref: '#/components/schemas/HrefType'
+        status:
+          $ref: '#/components/schemas/HrefType'
+      title: LinksPaymentInitiation
+      description: >-
+        A list of hyperlinks to be recognised by the TPP. The actual hyperlinks
+        used in the response depend on the dynamical decisions of the ASPSP when
+        processing the request.  **Remark:** All links can be relative or full
+        links, to be decided by the ASPSP.  Type of links admitted in this
+        response, (further links might be added for ASPSP defined extensions): 
+        * 'scaRedirect':   In case of an SCA Redirect Approach, the ASPSP is
+        transmitting the link to which to redirect the PSU browser. *
+        'scaOAuth':   In case of a SCA OAuth2 Approach, the ASPSP is
+        transmitting the URI where the configuration of the Authorisation  
+        Server can be retrieved. The configuration follows the OAuth 2.0
+        Authorisation Server Metadata specification. * 'startAuthorisation':  
+        In case, where an explicit start of the transaction authorisation is
+        needed, but no more data needs to be updated   (no authentication method
+        to be selected, no PSU identification nor PSU authentication data to be
+        uploaded). * 'startAuthorisationWithPsuIdentification':   The link to
+        the authorisation end-point, where the authorisation sub-resource has to
+        be generated while   uploading the PSU identification data. *
+        'startAuthorisationWithPsuAuthentication':   The link to the
+        authorisation end-point, where the authorisation sub-resource has to be
+        generated while   uploading the PSU authentication data. *
+        'startAuthorisationWithAuthenticationMethodSelection':   The link to the
+        authorisation end-point, where the authorisation sub-resource has to be
+        generated while   selecting the authentication method.   This link is
+        contained under exactly the same conditions as the data element
+        "scaMethods" * 'startAuthorisationWithTransactionAuthorisation':   The
+        link to the authorisation end-point, where the authorisation
+        sub-resource has to be generated while   authorising the transaction
+        e.g. by uploading an OTP received by SMS. * 'self':   The link to the
+        payment initiation resource created by this request.   This link can be
+        used to retrieve the resource data. * 'status':   The link to retrieve
+        the transaction status of the payment initiation. * 'scaStatus':   The
+        link to retrieve the scaStatus of the corresponding authorisation
+        sub-resource.   This link is only contained, if an authorisation
+        sub-resource has been already created. 
+      referenceName: LinksPaymentInitiation
+    LinksPaymentInitiationCancel:
+      type: object
+      properties:
+        scaRedirect:
+          $ref: '#/components/schemas/HrefType'
+        self:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisation:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisationWithPsuAuthentication:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisationWithPsuIdentification:
+          $ref: '#/components/schemas/HrefType'
+      title: LinksPaymentInitiationCancel
+      description: >-
+        A list of hyperlinks to be recognised by the TPP. The actual hyperlinks
+        used in the response depend on the dynamical decisions of the ASPSP when
+        processing the request.  Remark: All links can be relative or full
+        links, to be decided by the ASPSP.  Type of links admitted in this
+        response, (further links might be added for ASPSP defined
+        extensions):    * 'startAuthorisation':     In case, where just the
+        authorisation process of the cancellation needs to be started,     but
+        no additional data needs to be updated for time being (no authentication
+        method to be selected,     no PSU identification nor PSU authentication
+        data to be uploaded).   * 'startAuthorisationWithPsuIdentification':    
+        In case where a PSU Identification needs to be updated when starting the
+        cancellation authorisation:     The link to the
+        cancellation-authorisations end-point, where the cancellation
+        sub-resource has to be     generated while uploading the PSU
+        identification data.   * 'startAuthorisationWithPsuAuthentication':    
+        In case of a yet to be created authorisation sub-resource: The link to
+        the authorisation end-point,     where the authorisation sub-resource
+        has to be generated while uploading the PSU authentication data. 
+      referenceName: LinksPaymentInitiationCancel
+    LinksSigningBasket:
+      type: object
+      properties:
+        self:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisation:
+          $ref: '#/components/schemas/HrefType'
+        status:
+          $ref: '#/components/schemas/HrefType'
+      title: LinksSigningBasket
+      referenceName: LinksSigningBasket
+    LinksStartScaProcess:
+      type: object
+      properties:
+        authoriseTransaction:
+          $ref: '#/components/schemas/HrefType'
+        scaOAuth:
+          $ref: '#/components/schemas/HrefType'
+        scaRedirect:
+          $ref: '#/components/schemas/HrefType'
+        scaStatus:
+          $ref: '#/components/schemas/HrefType'
+        selectAuthenticationMethod:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisationWithEncryptedPsuAuthentication:
+          $ref: '#/components/schemas/HrefType'
+        startAuthorisationWithPsuAuthentication:
+          $ref: '#/components/schemas/HrefType'
+        updatePsuIdentification:
+          $ref: '#/components/schemas/HrefType'
+      title: LinksStartScaProcess
+      description: >-
+        A list of hyperlinks to be recognised by the TPP. The actual hyperlinks
+        used in the response depend on the dynamical decisions of the ASPSP when
+        processing the request.**Remark:** All links can be relative or full
+        links, to be decided by the ASPSP.  Type of links admitted in this
+        response, (further links might be added for ASPSP defined extensions): 
+        - 'scaRedirect':   In case of an SCA Redirect Approach, the ASPSP is
+        transmitting the link to which to   redirect the PSU browser. -
+        'scaOAuth':   In case of a SCA OAuth2 Approach, the ASPSP is
+        transmitting the URI where the configuration of the Authorisation Server
+        can be retrieved. The configuration follows the OAuth 2.0 Authorisation
+        Server Metadata specification. - 'updatePsuIdentification':   The link
+        to the authorisation or cancellation authorisation sub-resource,   where
+        PSU identification data needs to be uploaded. -
+        'startAuthorisationWithPsuAuthentication':   The link to the
+        authorisation or cancellation authorisation sub-resource,   where PSU
+        authentication data needs to be uploaded.   *
+        'startAuthorisationWithEncryptedPsuAuthentication':     Same as
+        startAuthorisactionWithPsuAuthentication where the authentication data
+        need to be encrypted on     application layer in uploading. -
+        'selectAuthenticationMethod':   The link to the authorisation or
+        cancellation authorisation sub-resource,   where the selected
+        authentication method needs to be uploaded.   This link is contained
+        under exactly the same conditions as the data element 'scaMethods'. -
+        'authoriseTransaction':   The link to the authorisation or cancellation
+        authorisation sub-resource,   where the authorisation data has to be
+        uploaded, e.g. the TOP received by SMS. - 'scaStatus':   The link to
+        retrieve the scaStatus of the corresponding authorisation sub-resource. 
+      referenceName: LinksStartScaProcess
+    LinksTransactionsPagination:
+      type: object
+      required:
+        - next
+      properties:
+        next:
+          $ref: '#/components/schemas/HrefType'
+      title: LinksTransactionsPagination
+      referenceName: LinksTransactionsPagination
+    NorwegianCrossBorderPaymentInitiationRequest:
+      type: object
+      required:
+        - creditorAccount
+        - creditorName
+        - debtorAccount
+        - instructedAmount
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAddress:
+          $ref: '#/components/schemas/Address'
+        creditorAgent:
+          type: string
+          description: creditorAgent
+        creditorName:
+          type: string
+          description: creditorName
+          minLength: 0
+          maxLength: 75
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorAgent:
+          type: string
+          description: Debtor agent is mandatory only for corporate payments.
+        debtorName:
+          type: string
+          description: debtorName
+          minLength: 0
+          maxLength: 75
+        endToEndIdentification:
+          type: string
+          description: endToEndIdentification
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        regulatoryReportingAmount:
+          $ref: '#/components/schemas/Amount'
+        regulatoryReportingCode:
+          type: string
+          description: "14:Purchase/sale of goods\n\t 26:Rent\n\t 29:Other purchase/sale of services\n\t 31:Interest,35:Dividend\n\t 38:Other capital dividend\n\t 41:Purchase/sale of property and activated rights abroad\n\t 43:Direct investment in shares\n\t 45:Direct investments in other capital\n\t 51:Portfolio-investment in shares and security shares\n\t 52:Portfolio-investments in bonds and certificates\n\t 53:Portfolio-investments in derivates\n\t 71:Life-insurance/pension\n\t 79:Other finance investments\n\t 81:Salary\n\t 82:Inheritance, gift etc"
+          enum:
+            - '14'
+            - '26'
+            - '29'
+            - '31'
+            - '35'
+            - '38'
+            - '41'
+            - '43'
+            - '45'
+            - '51'
+            - '52'
+            - '53'
+            - '71'
+            - '79'
+            - '81'
+            - '82'
+        regulatoryReportingInformation:
+          type: string
+          description: regulatoryReportingInformation
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+      title: NorwegianCrossBorderPaymentInitiationRequest
+      description: Cross Border Payment initiation for a credit transfer
+    OnBoardingLicense:
+      type: object
+      required:
+        - service
+      properties:
+        service:
+          type: string
+          enum:
+            - AIS
+            - PIS
+            - CIS
+      title: OnBoardingLicense
+      referenceName: OnBoardingLicense
+    OnBoardingLicenseInfo:
+      type: object
+      required:
+        - license
+      properties:
+        license:
+          $ref: '#/components/schemas/OnBoardingLicense'
+      title: OnBoardingLicenseInfo
+      referenceName: OnBoardingLicenseInfo
+    PaymentApprovalGetResponse:
+      type: object
+      required:
+        - paymentId
+      properties:
+        paymentId:
+          type: string
+          description: paymentId
+      title: PaymentApprovalGetResponse
+      description: Corporate payments in awaiting-approval status
+    PaymentFeeRequest:
+      type: object
+      required:
+        - creditorAccount
+        - debtorAccount
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        hasRemittanceInformationStructured:
+          type: boolean
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+      title: PaymentFeeRequest
+    PaymentFeeResponse:
+      type: object
+      required:
+        - transactionFeeIndicator
+      properties:
+        transactionFeeIndicator:
+          type: boolean
+        transactionFees:
+          $ref: '#/components/schemas/Amount'
+      title: PaymentFeeResponse
+    PaymentFrequency:
+      type: object
+      properties:
+        frequency:
+          type: string
+          description: Frequency of payments
+          enum:
+            - Once
+            - WeeklyOnMonday
+            - WeeklyOnTuesday
+            - WeeklyOnWednesday
+            - WeeklyOnThursday
+            - WeeklyOnFriday
+            - EveryMonth
+            - EveryThirdMonth
+            - EveryFourthMonth
+        numberOfPayments:
+          type: integer
+          format: int32
+          description: Number of payments - must be > 1 if frequency is not set to 'Once'
+          maximum: 99
+          exclusiveMaximum: false
+      title: PaymentFrequency
+      referenceName: PaymentFrequency
+    PaymentInitiationDeleteResponse:
+      type: object
+      required:
+        - transactionStatus
+      properties:
+        _links:
+          $ref: '#/components/schemas/LinksPaymentInitiationCancel'
+        challengeData:
+          $ref: '#/components/schemas/ChallengeData'
+        chosenScaMethod:
+          $ref: '#/components/schemas/AuthenticationObject'
+        scaMethods:
+          type: array
+          description: >-
+            This data element might be contained, if SCA is required and if the
+            PSU has a choice between different authentication methods. Depending
+            on the risk management of the ASPSP this choice might be offered
+            before or after the PSU has been identified with the first relevant
+            factor, or if an access token is transported. If this data element
+            is contained, then there is also an hyperlink of type
+            "startAuthorisationWith AuthenticationMethodsSelection" contained in
+            the response body.
+
+            These methods shall be presented towards the PSU for selection by
+            the TPP.
+          items:
+            $ref: '#/components/schemas/AuthenticationObject'
+        transactionStatus:
+          type: string
+          description: Transaction Status of the payment resource
+          enum:
+            - ACCP
+            - ACSC
+            - ACSP
+            - ACTC
+            - ACWC
+            - ACWP
+            - RCVD
+            - PDNG
+            - RJCT
+            - ACTV
+            - NEXT
+            - PRSY
+            - NAUT
+            - PATC
+            - CANC
+      title: PaymentInitiationDeleteResponse
+      description: Body of the response for a successful cancel payment request.
+    PaymentInitiationGetResponse:
+      type: object
+      required:
+        - creditorAccount
+        - creditorName
+        - debtorAccount
+        - instructedAmount
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAddress:
+          $ref: '#/components/schemas/Address'
+        creditorAgent:
+          type: string
+          description: creditorAgent
+        creditorName:
+          type: string
+          description: creditorName
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorName:
+          type: string
+          description: debtorName
+        endToEndIdentification:
+          type: string
+          description: >-
+            Unique end-to-end identity reference to be forwarded to the
+            beneficiary.
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+        transactionStatus:
+          type: string
+          description: transactionStatus
+          enum:
+            - ACCP
+            - ACSC
+            - ACSP
+            - ACTC
+            - ACWC
+            - ACWP
+            - RCVD
+            - PDNG
+            - RJCT
+            - ACTV
+            - NEXT
+            - PRSY
+            - NAUT
+            - PATC
+            - CANC
+      title: PaymentInitiationGetResponse
+      description: Body of the response for a successful get payment request.
+    PaymentInitiationNorwayPostRequest:
+      type: object
+      required:
+        - creditorAccount
+        - creditorName
+        - debtorAccount
+        - instructedAmount
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAddress:
+          $ref: '#/components/schemas/Address'
+        creditorAgent:
+          type: string
+          description: creditorAgent
+        creditorName:
+          type: string
+          description: creditorName
+          minLength: 0
+          maxLength: 75
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorName:
+          type: string
+          description: debtorName
+          minLength: 0
+          maxLength: 75
+        endToEndIdentification:
+          type: string
+          description: endToEndIdentification
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        purposeCode:
+          type: string
+          description: purposeCode
+          enum:
+            - BKDF
+            - BKFE
+            - BKFM
+            - BKIP
+            - BKPP
+            - CBLK
+            - CDCB
+            - CDCD
+            - CDCS
+            - CDDP
+            - CDOC
+            - CDQC
+            - ETUP
+            - FCOL
+            - MTUP
+            - ACCT
+            - CASH
+            - COLL
+            - CSDB
+            - DEPT
+            - INTC
+            - LIMA
+            - NETT
+            - BFWD
+            - CCIR
+            - CCPC
+            - CCPM
+            - CCSM
+            - CRDS
+            - CRPR
+            - CRSP
+            - CRTL
+            - EQPT
+            - EQUS
+            - EXPT
+            - EXTD
+            - FIXI
+            - FWBC
+            - FWCC
+            - FWSB
+            - FWSC
+            - MARG
+            - MBSB
+            - MBSC
+            - MGCC
+            - MGSC
+            - OCCC
+            - OPBC
+            - OPCC
+            - OPSB
+            - OPSC
+            - OPTN
+            - OTCD
+            - REPO
+            - RPBC
+            - RPCC
+            - RPSB
+            - RPSC
+            - RVPO
+            - SBSC
+            - SCIE
+            - SCIR
+            - SCRP
+            - SHBC
+            - SHCC
+            - SHSL
+            - SLEB
+            - SLOA
+            - SWBC
+            - SWCC
+            - SWPT
+            - SWSB
+            - SWSC
+            - TBAS
+            - TBBC
+            - TBCC
+            - TRCP
+            - AGRT
+            - AREN
+            - BEXP
+            - BOCE
+            - COMC
+            - CPYR
+            - GDDS
+            - GDSV
+            - GSCB
+            - LICF
+            - MP2B
+            - POPE
+            - ROYA
+            - SCVE
+            - SERV
+            - SUBS
+            - SUPP
+            - TRAD
+            - CHAR
+            - COMT
+            - MP2P
+            - ECPG
+            - ECPR
+            - ECPU
+            - EPAY
+            - CLPR
+            - COMP
+            - DBTC
+            - GOVI
+            - HLRP
+            - HLST
+            - INPC
+            - INPR
+            - INSC
+            - INSU
+            - INTE
+            - LBRI
+            - LIFI
+            - LOAN
+            - LOAR
+            - PENO
+            - PPTI
+            - RELG
+            - RINP
+            - TRFD
+            - FORW
+            - FXNT
+            - ADMG
+            - ADVA
+            - BCDM
+            - BCFG
+            - BLDM
+            - BNET
+            - CBFF
+            - CBFR
+            - CCRD
+            - CDBL
+            - CFEE
+            - CGDD
+            - CORT
+            - COST
+            - CPKC
+            - DCRD
+            - DSMT
+            - DVPM
+            - EDUC
+            - FACT
+            - FAND
+            - FCPM
+            - FEES
+            - GOVT
+            - ICCP
+            - IDCP
+            - IHRP
+            - INSM
+            - IVPT
+            - MCDM
+            - MCFG
+            - MSVC
+            - NOWS
+            - OCDM
+            - OCFG
+            - OFEE
+            - OTHR
+            - PADD
+            - PTSP
+            - RCKE
+            - RCPT
+            - REBT
+            - REFU
+            - RENT
+            - REOD
+            - RIMB
+            - RPNT
+            - RRBN
+            - RVPM
+            - SLPI
+            - SPLT
+            - STDY
+            - TBAN
+            - TBIL
+            - TCSC
+            - TELI
+            - TMPG
+            - TPRI
+            - TPRP
+            - TRNC
+            - TRVC
+            - WEBI
+            - ANNI
+            - CAFI
+            - CFDI
+            - CMDT
+            - DERI
+            - DIVD
+            - FREX
+            - HEDG
+            - INVS
+            - PRME
+            - SAVG
+            - SECU
+            - SEPI
+            - TREA
+            - UNIT
+            - FNET
+            - FUTR
+            - ANTS
+            - CVCF
+            - DMEQ
+            - DNTS
+            - HLTC
+            - HLTI
+            - HSPC
+            - ICRF
+            - LTCF
+            - MAFC
+            - MARF
+            - MDCS
+            - VIEW
+            - CDEP
+            - SWFP
+            - SWPP
+            - SWRS
+            - SWUF
+            - ADCS
+            - AEMP
+            - ALLW
+            - ALMY
+            - BBSC
+            - BECH
+            - BENE
+            - BONU
+            - CCHD
+            - COMM
+            - CSLP
+            - GFRP
+            - GVEA
+            - GVEB
+            - GVEC
+            - GVED
+            - GWLT
+            - HREC
+            - PAYR
+            - PEFC
+            - PENS
+            - PRCP
+            - RHBS
+            - SALA
+            - SSBE
+            - LBIN
+            - LCOL
+            - LFEE
+            - LMEQ
+            - LMFI
+            - LMRK
+            - LREB
+            - LREV
+            - LSFL
+            - ESTX
+            - FWLV
+            - GSTX
+            - HSTX
+            - INTX
+            - NITX
+            - PTXP
+            - RDTX
+            - TAXS
+            - VATX
+            - WHLD
+            - TAXR
+            - B112
+            - BR12
+            - TLRF
+            - TLRR
+            - AIRB
+            - BUSB
+            - FERB
+            - RLWY
+            - TRPT
+            - CBTV
+            - ELEC
+            - ENRG
+            - GASB
+            - NWCH
+            - NWCM
+            - OTLC
+            - PHON
+            - UBIL
+            - WTER
+        remittanceInformationStructured:
+          $ref: '#/components/schemas/RemittanceInformationStructured'
+        remittanceInformationStructuredArray:
+          type: array
+          description: remittanceInformationStructuredArray
+          items:
+            $ref: '#/components/schemas/RemittanceInformationStructured'
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+        requestedExecutionDate:
+          type: string
+          format: date
+          description: requestedExecutionDate
+        ultimateCreditor:
+          type: string
+          description: ultimateCreditor
+        ultimateDebtor:
+          type: string
+          description: ultimateDebtor
+      title: PaymentInitiationNorwayPostRequest
+      description: Payment initiation for a Norwegian domestic credit transfer
+    PaymentInitiationPostResponse:
+      type: object
+      required:
+        - _links
+        - paymentId
+        - transactionStatus
+      properties:
+        _links:
+          $ref: '#/components/schemas/LinksPaymentInitiation'
+        challengeData:
+          $ref: '#/components/schemas/ChallengeData'
+        chosenScaMethod:
+          $ref: '#/components/schemas/AuthenticationObject'
+        paymentId:
+          type: string
+          description: paymentId
+        psuMessage:
+          type: string
+          description: psuMessage
+        scaMethods:
+          type: array
+          description: scaMethods
+          items:
+            $ref: '#/components/schemas/AuthenticationObject'
+        tppMessages:
+          type: array
+          description: tppMessages
+          items:
+            $ref: '#/components/schemas/TppMessageGeneric'
+        transactionFeeIndicator:
+          type: boolean
+          description: transactionFeeIndicator
+        transactionFees:
+          $ref: '#/components/schemas/Amount'
+        transactionStatus:
+          type: string
+          description: transactionStatus
+          enum:
+            - ACCP
+            - ACSC
+            - ACSP
+            - ACTC
+            - ACWC
+            - ACWP
+            - RCVD
+            - PDNG
+            - RJCT
+            - ACTV
+            - NEXT
+            - PRSY
+            - NAUT
+            - PATC
+            - CANC
+      title: PaymentInitiationPostResponse
+      description: Body of the response for a successful payment initiation request.
+    PaymentInitiationStatusGetResponse:
+      type: object
+      required:
+        - transactionStatus
+      properties:
+        transactionStatus:
+          type: string
+          description: >-
+            The transaction status is filled with codes of the ISO 20022 data
+            table.
+          enum:
+            - ACCP
+            - ACSC
+            - ACSP
+            - ACTC
+            - ACWC
+            - ACWP
+            - RCVD
+            - PDNG
+            - RJCT
+            - ACTV
+            - NEXT
+            - PRSY
+            - NAUT
+            - PATC
+            - CANC
+      title: PaymentInitiationStatusGetResponse
+      description: Body of the response for a successful payment initiation status request
+    PeriodicPaymentInitiationNorwayGetResponse:
+      type: object
+      required:
+        - creditorAccount
+        - creditorName
+        - debtorAccount
+        - frequency
+        - instructedAmount
+        - startDate
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAddress:
+          $ref: '#/components/schemas/Address'
+        creditorAgent:
+          type: string
+          description: creditorAgent
+        creditorName:
+          type: string
+          description: creditorName
+        dayOfExecution:
+          type: string
+          description: >-
+            "31" is ultimo. The format is following the regular expression
+            \d{1,2}.
+
+            Example: The first day is addressed by "1". The date is referring to
+            the timezone of the ASPSP
+          enum:
+            - '01'
+            - '02'
+            - '03'
+            - '04'
+            - '05'
+            - '06'
+            - '07'
+            - '08'
+            - '09'
+            - '10'
+            - '11'
+            - '12'
+            - '13'
+            - '14'
+            - '15'
+            - '16'
+            - '17'
+            - '18'
+            - '19'
+            - '20'
+            - '21'
+            - '22'
+            - '23'
+            - '24'
+            - '25'
+            - '26'
+            - '27'
+            - '28'
+            - '29'
+            - '30'
+            - '31'
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorName:
+          type: string
+          description: debtorName
+        endDate:
+          type: string
+          format: date
+          description: >-
+            The last applicable day of execution. If not given, it is an
+            infinite standing order.
+        endToEndIdentification:
+          type: string
+          description: >-
+            Unique end-to-end identity reference to be forwarded to the
+            beneficiary.
+        executionRule:
+          type: string
+          description: >-
+            ASPSP might ignore this flag, depending on their rules in
+            OnlineBanking
+          enum:
+            - Following
+            - Preceeding
+        frequency:
+          type: string
+          description: >-
+            The frequency of the recurring payment resulting from this standing
+            order.
+          enum:
+            - Daily
+            - Weekly
+            - EveryTwoWeeks
+            - Monthly
+            - EveryTwoMonths
+            - Quarterly
+            - SemiAnnual
+            - Annual
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+        startDate:
+          type: string
+          format: date
+          description: >-
+            The first applicable day of execution starting from this date is the
+            first payment.
+        transactionStatus:
+          type: string
+          description: transactionStatus
+          enum:
+            - ACCP
+            - ACSC
+            - ACSP
+            - ACTC
+            - ACWC
+            - ACWP
+            - RCVD
+            - PDNG
+            - RJCT
+            - ACTV
+            - NEXT
+            - PRSY
+            - NAUT
+            - PATC
+            - CANC
+      title: PeriodicPaymentInitiationNorwayGetResponse
+      description: >-
+        Payment initiation response for retail periodic payment with message and
+        transfer within Norway
+    PeriodicPaymentInitiationNorwayPostRequest:
+      type: object
+      required:
+        - creditorAccount
+        - creditorName
+        - debtorAccount
+        - frequency
+        - instructedAmount
+        - startDate
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAddress:
+          $ref: '#/components/schemas/Address'
+        creditorAgent:
+          type: string
+          description: creditorAgent
+        creditorName:
+          type: string
+          description: creditorName
+          minLength: 0
+          maxLength: 75
+        dayOfExecution:
+          type: string
+          description: >-
+            "31" is ultimo. The format is following the regular expression
+            \d{1,2}.
+
+            Example: The first day is addressed by "1". The date is referring to
+            the timezone of the ASPSP
+          enum:
+            - '01'
+            - '02'
+            - '03'
+            - '04'
+            - '05'
+            - '06'
+            - '07'
+            - '08'
+            - '09'
+            - '10'
+            - '11'
+            - '12'
+            - '13'
+            - '14'
+            - '15'
+            - '16'
+            - '17'
+            - '18'
+            - '19'
+            - '20'
+            - '21'
+            - '22'
+            - '23'
+            - '24'
+            - '25'
+            - '26'
+            - '27'
+            - '28'
+            - '29'
+            - '30'
+            - '31'
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorName:
+          type: string
+          description: debtorName
+          minLength: 0
+          maxLength: 75
+        endDate:
+          type: string
+          format: date
+          description: >-
+            The last applicable day of execution. If not given, it is an
+            infinite standing order.
+        endToEndIdentification:
+          type: string
+          description: endToEndIdentification
+        executionRule:
+          type: string
+          description: >-
+            ASPSP might ignore this flag, depending on their rules in
+            OnlineBanking
+          enum:
+            - Following
+            - Preceeding
+        frequency:
+          type: string
+          description: >-
+            The frequency of the recurring payment resulting from this standing
+            order.
+          enum:
+            - Daily
+            - Weekly
+            - EveryTwoWeeks
+            - Monthly
+            - EveryTwoMonths
+            - Quarterly
+            - SemiAnnual
+            - Annual
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        purposeCode:
+          type: string
+          description: purposeCode
+          enum:
+            - BKDF
+            - BKFE
+            - BKFM
+            - BKIP
+            - BKPP
+            - CBLK
+            - CDCB
+            - CDCD
+            - CDCS
+            - CDDP
+            - CDOC
+            - CDQC
+            - ETUP
+            - FCOL
+            - MTUP
+            - ACCT
+            - CASH
+            - COLL
+            - CSDB
+            - DEPT
+            - INTC
+            - LIMA
+            - NETT
+            - BFWD
+            - CCIR
+            - CCPC
+            - CCPM
+            - CCSM
+            - CRDS
+            - CRPR
+            - CRSP
+            - CRTL
+            - EQPT
+            - EQUS
+            - EXPT
+            - EXTD
+            - FIXI
+            - FWBC
+            - FWCC
+            - FWSB
+            - FWSC
+            - MARG
+            - MBSB
+            - MBSC
+            - MGCC
+            - MGSC
+            - OCCC
+            - OPBC
+            - OPCC
+            - OPSB
+            - OPSC
+            - OPTN
+            - OTCD
+            - REPO
+            - RPBC
+            - RPCC
+            - RPSB
+            - RPSC
+            - RVPO
+            - SBSC
+            - SCIE
+            - SCIR
+            - SCRP
+            - SHBC
+            - SHCC
+            - SHSL
+            - SLEB
+            - SLOA
+            - SWBC
+            - SWCC
+            - SWPT
+            - SWSB
+            - SWSC
+            - TBAS
+            - TBBC
+            - TBCC
+            - TRCP
+            - AGRT
+            - AREN
+            - BEXP
+            - BOCE
+            - COMC
+            - CPYR
+            - GDDS
+            - GDSV
+            - GSCB
+            - LICF
+            - MP2B
+            - POPE
+            - ROYA
+            - SCVE
+            - SERV
+            - SUBS
+            - SUPP
+            - TRAD
+            - CHAR
+            - COMT
+            - MP2P
+            - ECPG
+            - ECPR
+            - ECPU
+            - EPAY
+            - CLPR
+            - COMP
+            - DBTC
+            - GOVI
+            - HLRP
+            - HLST
+            - INPC
+            - INPR
+            - INSC
+            - INSU
+            - INTE
+            - LBRI
+            - LIFI
+            - LOAN
+            - LOAR
+            - PENO
+            - PPTI
+            - RELG
+            - RINP
+            - TRFD
+            - FORW
+            - FXNT
+            - ADMG
+            - ADVA
+            - BCDM
+            - BCFG
+            - BLDM
+            - BNET
+            - CBFF
+            - CBFR
+            - CCRD
+            - CDBL
+            - CFEE
+            - CGDD
+            - CORT
+            - COST
+            - CPKC
+            - DCRD
+            - DSMT
+            - DVPM
+            - EDUC
+            - FACT
+            - FAND
+            - FCPM
+            - FEES
+            - GOVT
+            - ICCP
+            - IDCP
+            - IHRP
+            - INSM
+            - IVPT
+            - MCDM
+            - MCFG
+            - MSVC
+            - NOWS
+            - OCDM
+            - OCFG
+            - OFEE
+            - OTHR
+            - PADD
+            - PTSP
+            - RCKE
+            - RCPT
+            - REBT
+            - REFU
+            - RENT
+            - REOD
+            - RIMB
+            - RPNT
+            - RRBN
+            - RVPM
+            - SLPI
+            - SPLT
+            - STDY
+            - TBAN
+            - TBIL
+            - TCSC
+            - TELI
+            - TMPG
+            - TPRI
+            - TPRP
+            - TRNC
+            - TRVC
+            - WEBI
+            - ANNI
+            - CAFI
+            - CFDI
+            - CMDT
+            - DERI
+            - DIVD
+            - FREX
+            - HEDG
+            - INVS
+            - PRME
+            - SAVG
+            - SECU
+            - SEPI
+            - TREA
+            - UNIT
+            - FNET
+            - FUTR
+            - ANTS
+            - CVCF
+            - DMEQ
+            - DNTS
+            - HLTC
+            - HLTI
+            - HSPC
+            - ICRF
+            - LTCF
+            - MAFC
+            - MARF
+            - MDCS
+            - VIEW
+            - CDEP
+            - SWFP
+            - SWPP
+            - SWRS
+            - SWUF
+            - ADCS
+            - AEMP
+            - ALLW
+            - ALMY
+            - BBSC
+            - BECH
+            - BENE
+            - BONU
+            - CCHD
+            - COMM
+            - CSLP
+            - GFRP
+            - GVEA
+            - GVEB
+            - GVEC
+            - GVED
+            - GWLT
+            - HREC
+            - PAYR
+            - PEFC
+            - PENS
+            - PRCP
+            - RHBS
+            - SALA
+            - SSBE
+            - LBIN
+            - LCOL
+            - LFEE
+            - LMEQ
+            - LMFI
+            - LMRK
+            - LREB
+            - LREV
+            - LSFL
+            - ESTX
+            - FWLV
+            - GSTX
+            - HSTX
+            - INTX
+            - NITX
+            - PTXP
+            - RDTX
+            - TAXS
+            - VATX
+            - WHLD
+            - TAXR
+            - B112
+            - BR12
+            - TLRF
+            - TLRR
+            - AIRB
+            - BUSB
+            - FERB
+            - RLWY
+            - TRPT
+            - CBTV
+            - ELEC
+            - ENRG
+            - GASB
+            - NWCH
+            - NWCM
+            - OTLC
+            - PHON
+            - UBIL
+            - WTER
+        remittanceInformationStructured:
+          $ref: '#/components/schemas/RemittanceInformationStructured'
+        remittanceInformationStructuredArray:
+          type: array
+          description: remittanceInformationStructuredArray
+          items:
+            $ref: '#/components/schemas/RemittanceInformationStructured'
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+        requestedExecutionDate:
+          type: string
+          format: date
+          description: requestedExecutionDate
+        startDate:
+          type: string
+          format: date
+          description: >-
+            The first applicable day of execution starting from this date is the
+            first payment.
+        ultimateCreditor:
+          type: string
+          description: ultimateCreditor
+        ultimateDebtor:
+          type: string
+          description: ultimateDebtor
+      title: PeriodicPaymentInitiationNorwayPostRequest
+      description: Payment initiation for periodic payment within Norway
+    PersonAisLicense:
+      type: object
+      properties:
+        authenticatedDate:
+          type: string
+          format: date-time
+        dbId:
+          type: integer
+          format: int64
+        enabled:
+          type: boolean
+        tppName:
+          type: string
+      title: PersonAisLicense
+      referenceName: PersonAisLicense
+    RemittanceInformationDkStdCreditTransfer:
+      type: object
+      properties:
+        creditorRfReference:
+          type: string
+          description: >-
+            Creditor RF reference. Up to 25 chars. The first two are 'RF'.
+            Validated by modulus 97. The message and short message fields can
+            not be set when this field is in use
+          minLength: 0
+          maxLength: 25
+        nationalBankTransfer:
+          type: string
+          description: >-
+            Set to true if Transfer is > 1 million DKK. Credit Agent bic must be
+            set
+          pattern: true|false
+        shortMessage:
+          type: string
+          description: >-
+            Short message. Do not set if creditorRfReference is set. Max chars:
+            20
+          minLength: 0
+          maxLength: 20
+      title: RemittanceInformationDkStdCreditTransfer
+      referenceName: RemittanceInformationDkStdCreditTransfer
+    RemittanceInformationFIGiro:
+      type: object
+      required:
+        - cardType
+      properties:
+        cardType:
+          type: string
+          description: >-
+            Type of card, default: 01. available types: 01 Giro, 04 Giro, 71 FI,
+            73 FI, 75 FI
+          pattern: 01|04|71|73|75
+          enum:
+            - '01'
+            - '04'
+            - '71'
+            - '73'
+            - '75'
+        paymentId:
+          type: string
+          description: >-
+            Must be set for certain card types. Must be set if cardType is one
+            of: 04, 71, 75
+          minLength: 0
+          maxLength: 16
+      title: RemittanceInformationFIGiro
+      referenceName: RemittanceInformationFIGiro
+    RemittanceInformationSeBgPg:
+      type: object
+      properties:
+        ocr:
+          type: string
+          description: OCR reference control
+          minLength: 0
+          maxLength: 25
+        unstructured:
+          type: string
+          description: Must be set
+          minLength: 0
+          maxLength: 120
+      title: RemittanceInformationSeBgPg
+      description: Remittance Information for BgPg
+      referenceName: RemittanceInformationSeBgPg
+    RemittanceInformationStructured:
+      type: object
+      required:
+        - reference
+      properties:
+        reference:
+          type: string
+          minLength: 0
+          maxLength: 35
+        referenceIssuer:
+          type: string
+          minLength: 0
+          maxLength: 35
+        referenceType:
+          type: string
+          minLength: 0
+          maxLength: 35
+      title: RemittanceInformationStructured
+      description: 'Structured remittance information '
+      referenceName: RemittanceInformationStructured
+    ReportExchangeRate:
+      type: object
+      required:
+        - exchangeRate
+        - quotationDate
+        - sourceCurrency
+        - targetCurrency
+        - unitCurrency
+      properties:
+        contractIdentification:
+          type: string
+        exchangeRate:
+          type: string
+        quotationDate:
+          type: string
+          format: date
+        sourceCurrency:
+          type: string
+          description: ISO 4217 Alpha 3 currency code
+        targetCurrency:
+          type: string
+          description: ISO 4217 Alpha 3 currency code
+        unitCurrency:
+          type: string
+      title: ReportExchangeRate
+      description: Exchange Rate
+      referenceName: ReportExchangeRate
+    SepaPaymentInitiationRequest:
+      type: object
+      required:
+        - creditorAccount
+        - creditorName
+        - debtorAccount
+        - instructedAmount
+      properties:
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAddress:
+          $ref: '#/components/schemas/Address'
+        creditorAgent:
+          type: string
+          description: creditorAgent
+        creditorName:
+          type: string
+          description: creditorName
+          minLength: 0
+          maxLength: 75
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorAgent:
+          type: string
+          description: Debtor agent is mandatory only for corporate payments.
+        debtorName:
+          type: string
+          description: debtorName
+          minLength: 0
+          maxLength: 75
+        endToEndIdentification:
+          type: string
+          description: endToEndIdentification
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        purposeCode:
+          type: string
+          description: purposeCode
+          enum:
+            - BKDF
+            - BKFE
+            - BKFM
+            - BKIP
+            - BKPP
+            - CBLK
+            - CDCB
+            - CDCD
+            - CDCS
+            - CDDP
+            - CDOC
+            - CDQC
+            - ETUP
+            - FCOL
+            - MTUP
+            - ACCT
+            - CASH
+            - COLL
+            - CSDB
+            - DEPT
+            - INTC
+            - LIMA
+            - NETT
+            - BFWD
+            - CCIR
+            - CCPC
+            - CCPM
+            - CCSM
+            - CRDS
+            - CRPR
+            - CRSP
+            - CRTL
+            - EQPT
+            - EQUS
+            - EXPT
+            - EXTD
+            - FIXI
+            - FWBC
+            - FWCC
+            - FWSB
+            - FWSC
+            - MARG
+            - MBSB
+            - MBSC
+            - MGCC
+            - MGSC
+            - OCCC
+            - OPBC
+            - OPCC
+            - OPSB
+            - OPSC
+            - OPTN
+            - OTCD
+            - REPO
+            - RPBC
+            - RPCC
+            - RPSB
+            - RPSC
+            - RVPO
+            - SBSC
+            - SCIE
+            - SCIR
+            - SCRP
+            - SHBC
+            - SHCC
+            - SHSL
+            - SLEB
+            - SLOA
+            - SWBC
+            - SWCC
+            - SWPT
+            - SWSB
+            - SWSC
+            - TBAS
+            - TBBC
+            - TBCC
+            - TRCP
+            - AGRT
+            - AREN
+            - BEXP
+            - BOCE
+            - COMC
+            - CPYR
+            - GDDS
+            - GDSV
+            - GSCB
+            - LICF
+            - MP2B
+            - POPE
+            - ROYA
+            - SCVE
+            - SERV
+            - SUBS
+            - SUPP
+            - TRAD
+            - CHAR
+            - COMT
+            - MP2P
+            - ECPG
+            - ECPR
+            - ECPU
+            - EPAY
+            - CLPR
+            - COMP
+            - DBTC
+            - GOVI
+            - HLRP
+            - HLST
+            - INPC
+            - INPR
+            - INSC
+            - INSU
+            - INTE
+            - LBRI
+            - LIFI
+            - LOAN
+            - LOAR
+            - PENO
+            - PPTI
+            - RELG
+            - RINP
+            - TRFD
+            - FORW
+            - FXNT
+            - ADMG
+            - ADVA
+            - BCDM
+            - BCFG
+            - BLDM
+            - BNET
+            - CBFF
+            - CBFR
+            - CCRD
+            - CDBL
+            - CFEE
+            - CGDD
+            - CORT
+            - COST
+            - CPKC
+            - DCRD
+            - DSMT
+            - DVPM
+            - EDUC
+            - FACT
+            - FAND
+            - FCPM
+            - FEES
+            - GOVT
+            - ICCP
+            - IDCP
+            - IHRP
+            - INSM
+            - IVPT
+            - MCDM
+            - MCFG
+            - MSVC
+            - NOWS
+            - OCDM
+            - OCFG
+            - OFEE
+            - OTHR
+            - PADD
+            - PTSP
+            - RCKE
+            - RCPT
+            - REBT
+            - REFU
+            - RENT
+            - REOD
+            - RIMB
+            - RPNT
+            - RRBN
+            - RVPM
+            - SLPI
+            - SPLT
+            - STDY
+            - TBAN
+            - TBIL
+            - TCSC
+            - TELI
+            - TMPG
+            - TPRI
+            - TPRP
+            - TRNC
+            - TRVC
+            - WEBI
+            - ANNI
+            - CAFI
+            - CFDI
+            - CMDT
+            - DERI
+            - DIVD
+            - FREX
+            - HEDG
+            - INVS
+            - PRME
+            - SAVG
+            - SECU
+            - SEPI
+            - TREA
+            - UNIT
+            - FNET
+            - FUTR
+            - ANTS
+            - CVCF
+            - DMEQ
+            - DNTS
+            - HLTC
+            - HLTI
+            - HSPC
+            - ICRF
+            - LTCF
+            - MAFC
+            - MARF
+            - MDCS
+            - VIEW
+            - CDEP
+            - SWFP
+            - SWPP
+            - SWRS
+            - SWUF
+            - ADCS
+            - AEMP
+            - ALLW
+            - ALMY
+            - BBSC
+            - BECH
+            - BENE
+            - BONU
+            - CCHD
+            - COMM
+            - CSLP
+            - GFRP
+            - GVEA
+            - GVEB
+            - GVEC
+            - GVED
+            - GWLT
+            - HREC
+            - PAYR
+            - PEFC
+            - PENS
+            - PRCP
+            - RHBS
+            - SALA
+            - SSBE
+            - LBIN
+            - LCOL
+            - LFEE
+            - LMEQ
+            - LMFI
+            - LMRK
+            - LREB
+            - LREV
+            - LSFL
+            - ESTX
+            - FWLV
+            - GSTX
+            - HSTX
+            - INTX
+            - NITX
+            - PTXP
+            - RDTX
+            - TAXS
+            - VATX
+            - WHLD
+            - TAXR
+            - B112
+            - BR12
+            - TLRF
+            - TLRR
+            - AIRB
+            - BUSB
+            - FERB
+            - RLWY
+            - TRPT
+            - CBTV
+            - ELEC
+            - ENRG
+            - GASB
+            - NWCH
+            - NWCM
+            - OTLC
+            - PHON
+            - UBIL
+            - WTER
+        regulatoryReportingAmount:
+          $ref: '#/components/schemas/Amount'
+        regulatoryReportingCode:
+          type: string
+          description: "14:Purchase/sale of goods\n\t 26:Rent\n\t 29:Other purchase/sale of services\n\t 31:Interest,35:Dividend\n\t 38:Other capital dividend\n\t 41:Purchase/sale of property and activated rights abroad\n\t 43:Direct investment in shares\n\t 45:Direct investments in other capital\n\t 51:Portfolio-investment in shares and security shares\n\t 52:Portfolio-investments in bonds and certificates\n\t 53:Portfolio-investments in derivates\n\t 71:Life-insurance/pension\n\t 79:Other finance investments\n\t 81:Salary\n\t 82:Inheritance, gift etc"
+          enum:
+            - '14'
+            - '26'
+            - '29'
+            - '31'
+            - '35'
+            - '38'
+            - '41'
+            - '43'
+            - '45'
+            - '51'
+            - '52'
+            - '53'
+            - '71'
+            - '79'
+            - '81'
+            - '82'
+        regulatoryReportingInformation:
+          type: string
+          description: regulatoryReportingInformation
+        remittanceInformationUnstructured:
+          type: string
+          description: remittanceInformationUnstructured
+        ultimateCreditor:
+          type: string
+          description: ultimateCreditor
+        ultimateDebtor:
+          type: string
+          description: ultimateDebtor
+      title: SepaPaymentInitiationRequest
+      description: Payment initiation for SEPA transfer
+    SigningBasketAuthorisationInitiationResponse:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/LinksConsents'
+        authorisationId:
+          type: string
+        scaStatus:
+          type: string
+          enum:
+            - received
+            - psuIdentified
+            - psuAuthenticated
+            - scaMethodSelected
+            - started
+            - finalised
+            - failed
+            - exempted
+      title: SigningBasketAuthorisationInitiationResponse
+    SigningBasketRequest:
+      type: object
+      properties:
+        paymentIds:
+          type: array
+          items:
+            type: string
+      title: SigningBasketRequest
+      description: >-
+        JSON Body of a establish signing basket request. The body shall contain
+        at least one entry. 
+    SigningBasketResponse200:
+      type: object
+      properties:
+        payments:
+          type: array
+          items:
+            type: string
+        transactionStatus:
+          type: string
+          enum:
+            - RCVD
+            - PATC
+            - ACTC
+            - CANC
+            - RJCT
+      title: SigningBasketResponse200
+    SigningBasketResponse201:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/LinksSigningBasket'
+        basketId:
+          type: string
+        transactionStatus:
+          type: string
+          enum:
+            - RCVD
+            - PATC
+            - ACTC
+            - CANC
+            - RJCT
+      title: SigningBasketResponse201
+    SigningBasketStatusResponse200:
+      type: object
+      properties:
+        transactionStatus:
+          type: string
+          enum:
+            - RCVD
+            - PATC
+            - ACTC
+            - CANC
+            - RJCT
+      title: SigningBasketStatusResponse200
+    StartScaprocessResponse:
+      type: object
+      required:
+        - _links
+        - authorisationId
+        - scaStatus
+      properties:
+        _links:
+          $ref: '#/components/schemas/LinksStartScaProcess'
+        authorisationId:
+          type: string
+          description: Resource identification of the related SCA
+        challengeData:
+          $ref: '#/components/schemas/ChallengeData'
+        chosenScaMethod:
+          $ref: '#/components/schemas/AuthenticationObject'
+        psuMessage:
+          type: string
+          description: Text to be displayed to the PSU
+          minLength: 0
+          maxLength: 512
+        scaMethods:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticationObject'
+        scaStatus:
+          type: string
+          enum:
+            - received
+            - psuIdentified
+            - psuAuthenticated
+            - scaMethodSelected
+            - started
+            - finalised
+            - failed
+            - exempted
+      title: StartScaprocessResponse
+      description: Body of the JSON response for a Start SCA authorisation request.
+    SwedenBgPgPaymentRequest:
+      type: object
+      required:
+        - creditorAccount
+        - debtorAccount
+        - debtorAgent
+        - instructedAmount
+        - remittanceInformation
+        - requestedExecutionDate
+        - type
+      properties:
+        creditor:
+          $ref: '#/components/schemas/CreditorSeBgPg'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtor:
+          $ref: '#/components/schemas/Debtor'
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorAgent:
+          type: string
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        remittanceInformation:
+          $ref: '#/components/schemas/RemittanceInformationSeBgPg'
+        requestedExecutionDate:
+          type: string
+          format: date
+        type:
+          type: string
+          enum:
+            - bg
+            - pg
+      title: SwedenBgPgPaymentRequest
+    SwedenDomesticTransferPaymentRequest:
+      type: object
+      required:
+        - creditor
+        - creditorAccount
+        - debtorAccount
+        - debtorAgent
+        - instructedAmount
+        - requestedExecutionDate
+      properties:
+        creditor:
+          $ref: '#/components/schemas/CreditorDetailsSEDomTransfer'
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtor:
+          $ref: '#/components/schemas/Debtor'
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorAgent:
+          type: string
+        instructedAmount:
+          $ref: '#/components/schemas/Amount'
+        remittanceInformationUnstructured:
+          type: string
+          description: >-
+            Unstructured remittance informationcan be set if advice==true, and
+            then it is mandatory
+        requestedExecutionDate:
+          type: string
+          format: date
+      title: SwedenDomesticTransferPaymentRequest
+      description: Sweden domestic transfer
+    TppCertificateRequest:
+      type: object
+      required:
+        - notAfter
+        - notBefore
+        - registeredDate
+      properties:
+        licenses:
+          type: array
+          items:
+            type: string
+            enum:
+              - AIS
+              - PIS
+              - CIS
+        notAfter:
+          type: string
+          format: date-time
+        notBefore:
+          type: string
+          format: date-time
+        organizationIdentifier:
+          type: string
+        organizationName:
+          type: string
+        registeredDate:
+          type: string
+          format: date-time
+        serialNumber:
+          type: string
+        sha256:
+          type: string
+      title: TppCertificateRequest
+    TppEnableDisableReq:
+      type: object
+      properties:
+        comment:
+          type: string
+        enable:
+          type: boolean
+        reason:
+          type: string
+        toStatus:
+          type: string
+        tppId:
+          type: string
+      title: TppEnableDisableReq
+    TppEnableDisableResp:
+      type: object
+      properties:
+        modified:
+          type: boolean
+      title: TppEnableDisableResp
+    TppHistoryLog:
+      type: object
+      properties:
+        comment:
+          type: string
+        logDate:
+          type: string
+          format: date-time
+        reason:
+          type: string
+        toStatus:
+          type: string
+        tppId:
+          type: integer
+          format: int64
+      title: TppHistoryLog
+      referenceName: TppHistoryLog
+    TppLicenseInfo:
+      type: object
+      properties:
+        onBoardingDate:
+          type: string
+          format: date-time
+        reasonForStatusChange:
+          type: string
+        service:
+          type: string
+        services:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+        statusChangeTime:
+          type: string
+          format: date-time
+        statusText:
+          type: string
+        tppId:
+          type: integer
+          format: int64
+        tppName:
+          type: string
+        tppRegId:
+          type: string
+      title: TppLicenseInfo
+      referenceName: TppLicenseInfo
+    TppLogResponse:
+      type: object
+      properties:
+        logInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/TppHistoryLog'
+      title: TppLogResponse
+    TppMessageGeneric:
+      type: object
+      required:
+        - category
+        - code
+      properties:
+        category:
+          type: string
+          enum:
+            - ERROR
+            - WARNING
+        code:
+          type: object
+        path:
+          type: string
+        text:
+          type: string
+          description: Additional explaining text to the TPP.
+          minLength: 0
+          maxLength: 512
+      title: TppMessageGeneric
+      description: One Message to the TPP on operational issues.
+      referenceName: TppMessageGeneric
+    TppMetaData:
+      type: object
+      properties:
+        activeLicenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnBoardingLicenseInfo'
+        tppId:
+          type: string
+        tppName:
+          type: string
+        tppRefId:
+          type: string
+      title: TppMetaData
+      referenceName: TppMetaData
+    TppMetaDataResponseHolder:
+      type: object
+      properties:
+        tppMetaData:
+          type: array
+          items:
+            $ref: '#/components/schemas/TppMetaData'
+      title: TppMetaDataResponseHolder
+    TppModifyRequest:
+      type: object
+      properties:
+        licenseInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnBoardingLicenseInfo'
+        name:
+          type: string
+      title: TppModifyRequest
+    TppOnboardingRequest:
+      type: object
+      properties:
+        licenseInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/OnBoardingLicenseInfo'
+        name:
+          type: string
+        tppId:
+          type: string
+      title: TppOnboardingRequest
+    TppOnboardingResponse:
+      type: object
+      properties:
+        tppRefId:
+          type: string
+      title: TppOnboardingResponse
+    TransactionDetails:
+      type: object
+      required:
+        - transactionAmount
+      properties:
+        additionalInformation:
+          type: string
+          description: >-
+            Might be used by the ASPSP to transport additional transaction
+            related information to the PSU. 
+          minLength: 0
+          maxLength: 512
+        bankTransactionCode:
+          type: string
+          description: >-
+            Bank transaction code as used by the ASPSP and using the sub
+            elements of this structured code defined by ISO 20022.   This code
+            type is concatenating the three ISO20022 Codes    * Domain Code,   
+            * Family Code, and    * SubFamiliy Code  by hyphens, resulting in
+            DomainCode-FamilyCode-SubFamilyCode. 
+        bookingDate:
+          type: string
+          format: date
+          description: 'The Date when an entry is posted to an account on the ASPSPs books. '
+        checkId:
+          type: string
+          description: Identification of a Cheque.
+          minLength: 0
+          maxLength: 35
+        creditorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        creditorAgent:
+          type: string
+          description: Creditor Agent
+        creditorId:
+          type: string
+          description: Identification of Creditors, e.g. a SEPA Creditor ID.
+          minLength: 0
+          maxLength: 35
+        creditorName:
+          type: string
+          description: Creditor Name
+          minLength: 0
+          maxLength: 70
+        currencyExchange:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportExchangeRate'
+        debtorAccount:
+          $ref: '#/components/schemas/AccountReference'
+        debtorAgent:
+          type: string
+          description: Debtor Agent
+        debtorName:
+          type: string
+          description: Debtor Name
+          minLength: 0
+          maxLength: 70
+        dnbTransactionDateTime:
+          type: string
+          format: date-time
+          description: >-
+            The timestamp when the transaction was initiated. Note that this is
+            a DNB specific field.
+        dnbTransactionType:
+          type: string
+          description: The transaction type. Note that this is a DNB specific field.
+        endToEndId:
+          type: string
+          description: >-
+            Unique end-to-end identity reference to be forwarded to the
+            beneficiary.
+          minLength: 0
+          maxLength: 35
+        entryReference:
+          type: string
+          description: >-
+            Is the identification of the transaction as used e.g. for reference
+            for deltafunction on application level. The same identification as
+            for example used within camt.05x messages. 
+          minLength: 0
+          maxLength: 35
+        instructionIdentification:
+          type: string
+          minLength: 0
+          maxLength: 35
+        links:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/HrefType'
+        mandateId:
+          type: string
+          description: Identification of Mandates, e.g. a SEPA Mandate ID.
+          minLength: 0
+          maxLength: 35
+        proprietaryBankTransactionCode:
+          type: string
+          description: >-
+            Proprietary bank transaction code as used within a community or
+            within an ASPSP e.g. for MT94x based transaction reports. 
+          minLength: 0
+          maxLength: 35
+        purposeCode:
+          type: string
+          enum:
+            - BKDF
+            - BKFE
+            - BKFM
+            - BKIP
+            - BKPP
+            - CBLK
+            - CDCB
+            - CDCD
+            - CDCS
+            - CDDP
+            - CDOC
+            - CDQC
+            - ETUP
+            - FCOL
+            - MTUP
+            - ACCT
+            - CASH
+            - COLL
+            - CSDB
+            - DEPT
+            - INTC
+            - LIMA
+            - NETT
+            - BFWD
+            - CCIR
+            - CCPC
+            - CCPM
+            - CCSM
+            - CRDS
+            - CRPR
+            - CRSP
+            - CRTL
+            - EQPT
+            - EQUS
+            - EXPT
+            - EXTD
+            - FIXI
+            - FWBC
+            - FWCC
+            - FWSB
+            - FWSC
+            - MARG
+            - MBSB
+            - MBSC
+            - MGCC
+            - MGSC
+            - OCCC
+            - OPBC
+            - OPCC
+            - OPSB
+            - OPSC
+            - OPTN
+            - OTCD
+            - REPO
+            - RPBC
+            - RPCC
+            - RPSB
+            - RPSC
+            - RVPO
+            - SBSC
+            - SCIE
+            - SCIR
+            - SCRP
+            - SHBC
+            - SHCC
+            - SHSL
+            - SLEB
+            - SLOA
+            - SWBC
+            - SWCC
+            - SWPT
+            - SWSB
+            - SWSC
+            - TBAS
+            - TBBC
+            - TBCC
+            - TRCP
+            - AGRT
+            - AREN
+            - BEXP
+            - BOCE
+            - COMC
+            - CPYR
+            - GDDS
+            - GDSV
+            - GSCB
+            - LICF
+            - MP2B
+            - POPE
+            - ROYA
+            - SCVE
+            - SERV
+            - SUBS
+            - SUPP
+            - TRAD
+            - CHAR
+            - COMT
+            - MP2P
+            - ECPG
+            - ECPR
+            - ECPU
+            - EPAY
+            - CLPR
+            - COMP
+            - DBTC
+            - GOVI
+            - HLRP
+            - HLST
+            - INPC
+            - INPR
+            - INSC
+            - INSU
+            - INTE
+            - LBRI
+            - LIFI
+            - LOAN
+            - LOAR
+            - PENO
+            - PPTI
+            - RELG
+            - RINP
+            - TRFD
+            - FORW
+            - FXNT
+            - ADMG
+            - ADVA
+            - BCDM
+            - BCFG
+            - BLDM
+            - BNET
+            - CBFF
+            - CBFR
+            - CCRD
+            - CDBL
+            - CFEE
+            - CGDD
+            - CORT
+            - COST
+            - CPKC
+            - DCRD
+            - DSMT
+            - DVPM
+            - EDUC
+            - FACT
+            - FAND
+            - FCPM
+            - FEES
+            - GOVT
+            - ICCP
+            - IDCP
+            - IHRP
+            - INSM
+            - IVPT
+            - MCDM
+            - MCFG
+            - MSVC
+            - NOWS
+            - OCDM
+            - OCFG
+            - OFEE
+            - OTHR
+            - PADD
+            - PTSP
+            - RCKE
+            - RCPT
+            - REBT
+            - REFU
+            - RENT
+            - REOD
+            - RIMB
+            - RPNT
+            - RRBN
+            - RVPM
+            - SLPI
+            - SPLT
+            - STDY
+            - TBAN
+            - TBIL
+            - TCSC
+            - TELI
+            - TMPG
+            - TPRI
+            - TPRP
+            - TRNC
+            - TRVC
+            - WEBI
+            - ANNI
+            - CAFI
+            - CFDI
+            - CMDT
+            - DERI
+            - DIVD
+            - FREX
+            - HEDG
+            - INVS
+            - PRME
+            - SAVG
+            - SECU
+            - SEPI
+            - TREA
+            - UNIT
+            - FNET
+            - FUTR
+            - ANTS
+            - CVCF
+            - DMEQ
+            - DNTS
+            - HLTC
+            - HLTI
+            - HSPC
+            - ICRF
+            - LTCF
+            - MAFC
+            - MARF
+            - MDCS
+            - VIEW
+            - CDEP
+            - SWFP
+            - SWPP
+            - SWRS
+            - SWUF
+            - ADCS
+            - AEMP
+            - ALLW
+            - ALMY
+            - BBSC
+            - BECH
+            - BENE
+            - BONU
+            - CCHD
+            - COMM
+            - CSLP
+            - GFRP
+            - GVEA
+            - GVEB
+            - GVEC
+            - GVED
+            - GWLT
+            - HREC
+            - PAYR
+            - PEFC
+            - PENS
+            - PRCP
+            - RHBS
+            - SALA
+            - SSBE
+            - LBIN
+            - LCOL
+            - LFEE
+            - LMEQ
+            - LMFI
+            - LMRK
+            - LREB
+            - LREV
+            - LSFL
+            - ESTX
+            - FWLV
+            - GSTX
+            - HSTX
+            - INTX
+            - NITX
+            - PTXP
+            - RDTX
+            - TAXS
+            - VATX
+            - WHLD
+            - TAXR
+            - B112
+            - BR12
+            - TLRF
+            - TLRR
+            - AIRB
+            - BUSB
+            - FERB
+            - RLWY
+            - TRPT
+            - CBTV
+            - ELEC
+            - ENRG
+            - GASB
+            - NWCH
+            - NWCM
+            - OTLC
+            - PHON
+            - UBIL
+            - WTER
+        remittanceInformationStructured:
+          type: string
+          description: >-
+            Reference as contained in the structured remittance reference
+            structure (without the surrounding XML structure).  Different from
+            other places the content is containt in plain form not in form of a
+            structured field. 
+          minLength: 0
+          maxLength: 140
+        remittanceInformationUnstructured:
+          type: string
+          minLength: 0
+          maxLength: 140
+        transactionAmount:
+          $ref: '#/components/schemas/Amount'
+        transactionId:
+          type: string
+          description: Identification of a transaction.
+        ultimateCreditor:
+          type: string
+          description: Ultimate Creditor
+          minLength: 0
+          maxLength: 70
+        ultimateDebtor:
+          type: string
+          description: Ultimate Debtor
+          minLength: 0
+          maxLength: 70
+        valueDate:
+          type: string
+          format: date
+          description: >-
+            The Date at which assets become available to the account owner in
+            case of a credit.
+      title: TransactionDetails
+      description: Transaction details
+      referenceName: TransactionDetails

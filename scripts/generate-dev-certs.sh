@@ -18,6 +18,49 @@ openssl req -x509 -new -nodes -key "$CERT_DIR/ca.key" -sha256 -days 3650 \
   -out "$CERT_DIR/ca.crt" \
   -subj "/C=NO/O=PSD2 Gateway/CN=psd2-dev-ca"
 
+generate_client_certificate() {
+  local file_prefix="$1"
+  local subject_cn="$2"
+  local org="$3"
+  local dns_name="$4"
+
+  cat > "$TMP_DIR/$file_prefix-openssl.cnf" <<EOF
+[ req ]
+distinguished_name = req_distinguished_name
+prompt = no
+req_extensions = req_ext
+
+[ req_distinguished_name ]
+C = NO
+O = $org
+CN = $subject_cn
+
+[ req_ext ]
+subjectAltName = @alt_names
+extendedKeyUsage = clientAuth
+
+[ alt_names ]
+DNS.1 = $dns_name
+EOF
+
+  openssl genrsa -out "$CERT_DIR/$file_prefix.key" 2048
+  openssl req -new -key "$CERT_DIR/$file_prefix.key" \
+    -out "$TMP_DIR/$file_prefix.csr" \
+    -config "$TMP_DIR/$file_prefix-openssl.cnf"
+  openssl x509 -req -in "$TMP_DIR/$file_prefix.csr" \
+    -CA "$CERT_DIR/ca.crt" -CAkey "$CERT_DIR/ca.key" -CAcreateserial \
+    -out "$CERT_DIR/$file_prefix.crt" -days 825 -sha256 \
+    -extfile "$TMP_DIR/$file_prefix-openssl.cnf" -extensions req_ext
+
+  openssl pkcs12 -export \
+    -inkey "$CERT_DIR/$file_prefix.key" \
+    -in "$CERT_DIR/$file_prefix.crt" \
+    -certfile "$CERT_DIR/ca.crt" \
+    -out "$CERT_DIR/$file_prefix.p12" \
+    -passout "pass:$PASSWORD" \
+    -name "$file_prefix"
+}
+
 cat > "$TMP_DIR/kong-openssl.cnf" <<'EOF'
 [ req ]
 distinguished_name = req_distinguished_name
@@ -70,28 +113,110 @@ DNS.1 = tpp-client-app
 DNS.2 = sample-tpp
 EOF
 
-openssl genrsa -out "$CERT_DIR/tpp-client.key" 2048
-openssl req -new -key "$CERT_DIR/tpp-client.key" \
-  -out "$TMP_DIR/tpp-client.csr" \
-  -config "$TMP_DIR/tpp-openssl.cnf"
-openssl x509 -req -in "$TMP_DIR/tpp-client.csr" \
+generate_client_certificate "tpp-client" "tpp-client-app" "Sample TPP" "tpp-client-app"
+generate_client_certificate "gateway-client" "psd2-gateway-app" "PSD2 Gateway" "psd2-gateway-app"
+
+cat > "$TMP_DIR/adapter-dnb-openssl.cnf" <<'EOF'
+[ req ]
+distinguished_name = req_distinguished_name
+prompt = no
+req_extensions = req_ext
+
+[ req_distinguished_name ]
+C = NO
+O = Adapter DNB
+CN = adapter-dnb
+
+[ req_ext ]
+subjectAltName = @alt_names
+extendedKeyUsage = serverAuth, clientAuth
+
+[ alt_names ]
+DNS.1 = adapter-dnb
+EOF
+
+openssl genrsa -out "$CERT_DIR/adapter-dnb.key" 2048
+openssl req -new -key "$CERT_DIR/adapter-dnb.key" \
+  -out "$TMP_DIR/adapter-dnb.csr" \
+  -config "$TMP_DIR/adapter-dnb-openssl.cnf"
+openssl x509 -req -in "$TMP_DIR/adapter-dnb.csr" \
   -CA "$CERT_DIR/ca.crt" -CAkey "$CERT_DIR/ca.key" -CAcreateserial \
-  -out "$CERT_DIR/tpp-client.crt" -days 825 -sha256 \
-  -extfile "$TMP_DIR/tpp-openssl.cnf" -extensions req_ext
+  -out "$CERT_DIR/adapter-dnb.crt" -days 825 -sha256 \
+  -extfile "$TMP_DIR/adapter-dnb-openssl.cnf" -extensions req_ext
 
 openssl pkcs12 -export \
-  -inkey "$CERT_DIR/tpp-client.key" \
-  -in "$CERT_DIR/tpp-client.crt" \
+  -inkey "$CERT_DIR/adapter-dnb.key" \
+  -in "$CERT_DIR/adapter-dnb.crt" \
   -certfile "$CERT_DIR/ca.crt" \
-  -out "$CERT_DIR/tpp-client.p12" \
+  -out "$CERT_DIR/adapter-dnb.p12" \
   -passout "pass:$PASSWORD" \
-  -name "tpp-client"
+  -name "adapter-dnb"
+
+cat > "$TMP_DIR/mock-dnb-bank-openssl.cnf" <<'EOF'
+[ req ]
+distinguished_name = req_distinguished_name
+prompt = no
+req_extensions = req_ext
+
+[ req_distinguished_name ]
+C = NO
+O = Mock DNB
+CN = mock-dnb-bank
+
+[ req_ext ]
+subjectAltName = @alt_names
+extendedKeyUsage = serverAuth
+
+[ alt_names ]
+DNS.1 = mock-dnb-bank
+EOF
+
+openssl genrsa -out "$CERT_DIR/mock-dnb-bank.key" 2048
+openssl req -new -key "$CERT_DIR/mock-dnb-bank.key" \
+  -out "$TMP_DIR/mock-dnb-bank.csr" \
+  -config "$TMP_DIR/mock-dnb-bank-openssl.cnf"
+openssl x509 -req -in "$TMP_DIR/mock-dnb-bank.csr" \
+  -CA "$CERT_DIR/ca.crt" -CAkey "$CERT_DIR/ca.key" -CAcreateserial \
+  -out "$CERT_DIR/mock-dnb-bank.crt" -days 825 -sha256 \
+  -extfile "$TMP_DIR/mock-dnb-bank-openssl.cnf" -extensions req_ext
+
+openssl pkcs12 -export \
+  -inkey "$CERT_DIR/mock-dnb-bank.key" \
+  -in "$CERT_DIR/mock-dnb-bank.crt" \
+  -certfile "$CERT_DIR/ca.crt" \
+  -out "$CERT_DIR/mock-dnb-bank.p12" \
+  -passout "pass:$PASSWORD" \
+  -name "mock-dnb-bank"
 
 rm -f "$CERT_DIR/tpp-truststore.p12"
 keytool -importcert -noprompt \
   -alias psd2-dev-ca \
   -file "$CERT_DIR/ca.crt" \
   -keystore "$CERT_DIR/tpp-truststore.p12" \
+  -storetype PKCS12 \
+  -storepass "$PASSWORD"
+
+rm -f "$CERT_DIR/gateway-truststore.p12"
+keytool -importcert -noprompt \
+  -alias psd2-dev-ca \
+  -file "$CERT_DIR/ca.crt" \
+  -keystore "$CERT_DIR/gateway-truststore.p12" \
+  -storetype PKCS12 \
+  -storepass "$PASSWORD"
+
+rm -f "$CERT_DIR/adapter-dnb-truststore.p12"
+keytool -importcert -noprompt \
+  -alias psd2-dev-ca \
+  -file "$CERT_DIR/ca.crt" \
+  -keystore "$CERT_DIR/adapter-dnb-truststore.p12" \
+  -storetype PKCS12 \
+  -storepass "$PASSWORD"
+
+rm -f "$CERT_DIR/mock-dnb-bank-truststore.p12"
+keytool -importcert -noprompt \
+  -alias psd2-dev-ca \
+  -file "$CERT_DIR/ca.crt" \
+  -keystore "$CERT_DIR/mock-dnb-bank-truststore.p12" \
   -storetype PKCS12 \
   -storepass "$PASSWORD"
 
