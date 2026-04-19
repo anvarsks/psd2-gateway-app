@@ -51,6 +51,7 @@ The adapter services will own:
 - Splunk management port: `18089`
 - Runtime: Docker Compose
 - Deployment assets live under: `deploy/`
+- Jenkins pipeline assets live under: `ci/jenkins/`
 - Sample TPP client app lives under: `tpp-client-app/`
 - First ASPSP adapter lives under: `adapter-dnb/`
 - Mock DNB bank lives under: `mock-dnb-bank/`
@@ -205,6 +206,21 @@ Stop the stack:
 ```bash
 cd /Users/anvarshameemks/psd2-gateway-app && docker compose --env-file .env -f deploy/docker-compose.yml down
 ```
+
+## CI/CD
+
+Jenkins pipeline files now exist for:
+
+- `psd2-gateway-app` CI
+- `psd2-gateway-app` CD
+- `adapter-dnb` CI
+- `adapter-dnb` CD
+
+The current intended CI/CD model is:
+
+- CI builds and pushes Docker images to JFrog Artifactory
+- CD pulls immutable image tags from Artifactory
+- CD deploys with `deploy/docker-compose.release.yml`
 
 ## Health Endpoints
 

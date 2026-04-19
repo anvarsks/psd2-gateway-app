@@ -7,6 +7,7 @@ Keep runtime and deployment assets separate from application source code so the 
 ## Contents
 
 - `deploy/docker-compose.yml` for local orchestration
+- `deploy/docker-compose.release.yml` for image-based deployment from CI/CD
 - `deploy/kong/` for Kong db-less gateway config
 - `deploy/nginx/` for the public inbound mTLS edge
 - `deploy/outbound-nginx/` for the outbound DNB API gateway
