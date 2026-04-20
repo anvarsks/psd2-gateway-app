@@ -65,7 +65,10 @@ pipeline {
         stage('Smoke Check') {
             steps {
                 dir("${env.REPO_ROOT}") {
-                    sh 'curl -fsS http://localhost:8100/status > /dev/null'
+                    sh '''
+                      docker inspect --format='{{.State.Health.Status}}' psd2-gateway-app | grep -qx healthy
+                      docker exec kong-psd2-gateway kong health
+                    '''
                 }
             }
         }
