@@ -13,10 +13,29 @@ trap cleanup EXIT
 
 mkdir -p "$CERT_DIR"
 
+cat > "$TMP_DIR/ca-openssl.cnf" <<'EOF'
+[ req ]
+distinguished_name = req_distinguished_name
+prompt = no
+x509_extensions = v3_ca
+
+[ req_distinguished_name ]
+C = NO
+O = PSD2 Gateway
+CN = psd2-dev-ca
+
+[ v3_ca ]
+basicConstraints = critical, CA:true
+keyUsage = critical, keyCertSign, cRLSign
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+EOF
+
 openssl genrsa -out "$CERT_DIR/ca.key" 2048
 openssl req -x509 -new -nodes -key "$CERT_DIR/ca.key" -sha256 -days 3650 \
   -out "$CERT_DIR/ca.crt" \
-  -subj "/C=NO/O=PSD2 Gateway/CN=psd2-dev-ca"
+  -config "$TMP_DIR/ca-openssl.cnf" \
+  -extensions v3_ca
 
 generate_client_certificate() {
   local file_prefix="$1"
@@ -37,7 +56,10 @@ CN = $subject_cn
 
 [ req_ext ]
 subjectAltName = @alt_names
+basicConstraints = critical, CA:false
+keyUsage = critical, digitalSignature, keyEncipherment
 extendedKeyUsage = clientAuth
+subjectKeyIdentifier = hash
 
 [ alt_names ]
 DNS.1 = $dns_name
@@ -74,7 +96,10 @@ CN = localhost
 
 [ req_ext ]
 subjectAltName = @alt_names
+basicConstraints = critical, CA:false
+keyUsage = critical, digitalSignature, keyEncipherment
 extendedKeyUsage = serverAuth
+subjectKeyIdentifier = hash
 
 [ alt_names ]
 DNS.1 = localhost
@@ -106,7 +131,10 @@ CN = tpp-client-app
 
 [ req_ext ]
 subjectAltName = @alt_names
+basicConstraints = critical, CA:false
+keyUsage = critical, digitalSignature, keyEncipherment
 extendedKeyUsage = clientAuth
+subjectKeyIdentifier = hash
 
 [ alt_names ]
 DNS.1 = tpp-client-app
@@ -129,7 +157,10 @@ CN = adapter-dnb
 
 [ req_ext ]
 subjectAltName = @alt_names
+basicConstraints = critical, CA:false
+keyUsage = critical, digitalSignature, keyEncipherment
 extendedKeyUsage = serverAuth, clientAuth
+subjectKeyIdentifier = hash
 
 [ alt_names ]
 DNS.1 = adapter-dnb
@@ -165,7 +196,10 @@ CN = mock-dnb-bank
 
 [ req_ext ]
 subjectAltName = @alt_names
+basicConstraints = critical, CA:false
+keyUsage = critical, digitalSignature, keyEncipherment
 extendedKeyUsage = serverAuth
+subjectKeyIdentifier = hash
 
 [ alt_names ]
 DNS.1 = mock-dnb-bank
@@ -201,7 +235,10 @@ CN = outbound-dnb-apigw
 
 [ req_ext ]
 subjectAltName = @alt_names
+basicConstraints = critical, CA:false
+keyUsage = critical, digitalSignature, keyEncipherment
 extendedKeyUsage = serverAuth, clientAuth
+subjectKeyIdentifier = hash
 
 [ alt_names ]
 DNS.1 = outbound-dnb-apigw
