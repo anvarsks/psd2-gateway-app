@@ -8,10 +8,11 @@ pipeline {
 
     environment {
         APP_NAME = 'psd2-gateway-app'
+        REPO_ROOT = '/Users/anvarshameemks/psd2-gateway-app'
         PSD2_GATEWAY_IMAGE = "${env.ARTIFACTORY_DOCKER_REGISTRY}/${APP_NAME}:${params.IMAGE_TAG}"
         ADAPTER_DNB_IMAGE = "${env.ADAPTER_DNB_IMAGE ?: 'deploy-adapter-dnb:latest'}"
         MOCK_DNB_BANK_IMAGE = "${env.MOCK_DNB_BANK_IMAGE ?: 'deploy-mock-dnb-bank:latest'}"
-        COMPOSE_FILE = 'deploy/docker-compose.release.yml'
+        COMPOSE_FILE = "${REPO_ROOT}/deploy/docker-compose.release.yml"
     }
 
     options {
@@ -28,7 +29,9 @@ pipeline {
 
         stage('Prepare TLS') {
             steps {
-                sh './scripts/generate-dev-certs.sh'
+                dir("${env.REPO_ROOT}") {
+                    sh './scripts/generate-dev-certs.sh'
+                }
             }
         }
 
@@ -51,15 +54,19 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh '''
-                  docker compose -f ${COMPOSE_FILE} up -d psd2-gateway-app kong nginx-edge
-                '''
+                dir("${env.REPO_ROOT}") {
+                    sh '''
+                      docker compose -f ${COMPOSE_FILE} up -d psd2-gateway-app kong nginx-edge
+                    '''
+                }
             }
         }
 
         stage('Smoke Check') {
             steps {
-                sh 'curl -fsS http://localhost:8100/status > /dev/null'
+                dir("${env.REPO_ROOT}") {
+                    sh 'curl -fsS http://localhost:8100/status > /dev/null'
+                }
             }
         }
     }

@@ -12,6 +12,7 @@ services:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
       - /Users/anvarshameemks/psd2-gateway-app:/workspace/psd2-gateway-app
+      - /Users/anvarshameemks/psd2-gateway-app:/Users/anvarshameemks/psd2-gateway-app
     environment:
       JAVA_OPTS: -Djenkins.install.runSetupWizard=true
     networks:
