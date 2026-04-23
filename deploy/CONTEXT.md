@@ -8,6 +8,7 @@ Keep runtime and deployment assets separate from application source code so the 
 
 - `deploy/docker-compose.yml` for local orchestration
 - `deploy/docker-compose.release.yml` for image-based deployment from CI/CD
+- planned database and vault runtime assets for `PostgreSQL` and `OpenBao`
 - `deploy/kong/` for Kong db-less gateway config
 - `deploy/nginx/` for the public inbound mTLS edge
 - `deploy/outbound-nginx/` for the outbound DNB API gateway
@@ -29,6 +30,11 @@ Current default runtime now includes:
 - `mock-dnb-bank`
 - `kong`
 - `nginx-edge`
+
+Planned next runtime additions:
+
+- `postgres` for business state and journaling persistence
+- `openbao` for database secrets and encryption-key management
 
 ## TLS Note
 
@@ -71,3 +77,19 @@ Latest verification:
 - local Compose stack started successfully with the outbound gateway in place
 - `GET /psd2/aspsps/dnb/accounts` returned `200` through Kong
 - outbound gateway access log showed adapter client DN `CN=adapter-dnb,O=Adapter DNB,C=NO`
+- release-style deployment succeeded for `adapter-dnb` and `psd2-gateway-app`
+- direct mTLS access through `https://localhost:8443/psd2/status` returned `200` after certificate regeneration and forced container recreation
+
+## Planned Data Runtime Direction
+
+The deployment layer is planned to add a production-oriented data runtime around:
+
+- `PostgreSQL` for consent mapping, payment mapping, request journaling, response journaling, and audit data
+- `OpenBao` for secret distribution and encryption support
+
+Planned production data responsibilities:
+
+- `psd2-gateway-app` generates TPP-facing gateway IDs for consent and payment tracking
+- `psd2-gateway-app` persists the mapping to ASPSP-specific identifiers
+- request and response payloads are encrypted before database persistence
+- runtime secrets such as database credentials are supplied by `OpenBao` instead of static config values checked into the repo

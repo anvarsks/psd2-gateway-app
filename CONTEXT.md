@@ -35,6 +35,80 @@ The adapter services will own:
 - ASPSP-specific protocol and payload handling
 - transformation from ASPSP-specific formats into canonical gateway models
 
+## Planned Production Data Layer
+
+The next production-ready backend addition is a relational persistence layer for business state, request journaling, response journaling, and TPP-facing tracking identifiers.
+
+Chosen direction:
+
+- primary database: `PostgreSQL`
+- secrets and encryption platform: `OpenBao`
+- Kong remains in `db-less` mode
+
+The gateway will own the public identifiers shared with TPPs:
+
+- `gateway_consent_id`
+- `gateway_payment_id`
+
+The gateway will internally map those identifiers to ASPSP-specific identifiers:
+
+- `aspsp_consent_id`
+- `aspsp_payment_id`
+
+The intended tracking model is:
+
+- TPP sends consent and payment requests to `psd2-gateway-app`
+- `psd2-gateway-app` generates the PSD2 gateway IDs
+- `psd2-gateway-app` persists the mapping to the ASPSP identifiers returned later by the adapter/ASPSP flow
+- TPPs use the gateway IDs for tracking and follow-up requests
+
+## Planned GDPR-Oriented Persistence Model
+
+The persistence layer is planned to separate business reference data from sensitive payload journaling.
+
+Planned table groups:
+
+- consent reference table for gateway-to-ASPSP consent ID mapping
+- payment reference table for gateway-to-ASPSP payment ID mapping
+- TPP request journal table
+- ASPSP response journal table
+- audit event table
+- idempotency table
+
+Planned GDPR controls:
+
+- data minimization by default
+- store gateway-owned identifiers separately from payload bodies
+- hash or pseudonymize searchable PSU identifiers where possible
+- redact sensitive headers before persistence
+- encrypt sensitive request and response payloads before writing to the database
+- retain business-reference data longer than raw request/response journals
+- partition journal and audit tables by time for purge and retention control
+- support selective erasure or cryptographic shredding for payload data while retaining legally required audit metadata
+
+Sensitive payloads are planned to be stored as encrypted blobs with:
+
+- payload ciphertext
+- payload hash
+- encryption key reference
+
+## Planned Secret and Key Management
+
+Database secrets are planned to be kept outside application configuration and provided by `OpenBao`.
+
+Chosen OSS direction:
+
+- `OpenBao` for secret storage
+- `OpenBao` for database credential brokering where practical
+- `OpenBao Transit` or equivalent centralized key usage for payload encryption
+
+The intended application secret flow is:
+
+- the gateway authenticates to `OpenBao`
+- the gateway fetches short-lived PostgreSQL credentials or a tightly controlled static credential
+- the gateway uses managed encryption keys for request/response payload protection
+- PostgreSQL stores ciphertext, not plaintext secrets or sensitive payload bodies
+
 ## Current Implementation
 
 - Framework: Spring Boot 3.2.5
@@ -49,6 +123,8 @@ The adapter services will own:
 - Splunk Web port: `18000`
 - Splunk HEC port: `18088`
 - Splunk management port: `18089`
+- planned primary database: `PostgreSQL`
+- planned vault/secrets system: `OpenBao`
 - Runtime: Docker Compose
 - Deployment assets live under: `deploy/`
 - Jenkins pipeline assets live under: `ci/jenkins/`
@@ -150,6 +226,8 @@ Latest validated runtime flow:
 - `GET /psd2/aspsps/dnb/accounts` returned `200` through Kong
 - correlation ID `e2e-dnb-003` flowed through the gateway path
 - `outbound-dnb-apigw` access log showed client DN `CN=adapter-dnb,O=Adapter DNB,C=NO`
+- Splunk captured gateway, Kong, and adapter logs for DNB-backed requests
+- mTLS edge validation through `https://localhost:8443/psd2/status` returned `200` after regenerating dev certificates with explicit X.509 extensions and recreating `nginx-edge`
 
 Implemented internal policy examples:
 

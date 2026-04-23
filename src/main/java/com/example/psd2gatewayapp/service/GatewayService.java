@@ -15,10 +15,15 @@ import org.springframework.stereotype.Service;
 public class GatewayService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayService.class);
+    private static final String DNB_PROVIDER = "dnb";
     private final AdapterDnbClientService adapterDnbClientService;
+    private final GatewayConsentService gatewayConsentService;
 
-    public GatewayService(AdapterDnbClientService adapterDnbClientService) {
+    public GatewayService(
+            AdapterDnbClientService adapterDnbClientService,
+            GatewayConsentService gatewayConsentService) {
         this.adapterDnbClientService = adapterDnbClientService;
+        this.gatewayConsentService = gatewayConsentService;
     }
 
     public String getStatus(String correlationId) {
@@ -46,11 +51,19 @@ public class GatewayService {
         Map<String, Object> adapterResponse =
                 adapterDnbClientService.createConsent(correlationId, psuId, redirectUri, requestBody);
         Map<String, Object> rawConsent = asMap(adapterResponse.get("data"));
+        String aspspConsentId = String.valueOf(rawConsent.get("consentId"));
+        String consentStatus = String.valueOf(rawConsent.get("consentStatus"));
+        var consentReference = gatewayConsentService.createConsentReference(
+                DNB_PROVIDER,
+                aspspConsentId,
+                psuId,
+                redirectUri,
+                consentStatus);
 
         Map<String, Object> consent = new LinkedHashMap<>();
-        consent.put("id", rawConsent.get("consentId"));
-        consent.put("status", rawConsent.get("consentStatus"));
-        consent.put("links", rawConsent.get("_links"));
+        consent.put("id", consentReference.gatewayConsentId());
+        consent.put("status", consentStatus);
+        consent.put("links", buildGatewayConsentLinks(consentReference.gatewayConsentId()));
 
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("consent", consent);
@@ -60,8 +73,11 @@ public class GatewayService {
     public Map<String, Object> getDnbConsent(String correlationId, String psuId, String consentId)
             throws IOException, GeneralSecurityException, InterruptedException {
         LOGGER.info("Fetching DNB consent through adapter. consentId={} X-Correlation-Id={}", consentId, correlationId);
-        Map<String, Object> adapterResponse = adapterDnbClientService.getConsent(correlationId, psuId, consentId);
+        var consentReference = gatewayConsentService.getConsentReference(consentId, DNB_PROVIDER, psuId);
+        Map<String, Object> adapterResponse =
+                adapterDnbClientService.getConsent(correlationId, psuId, consentReference.aspspConsentId());
         Map<String, Object> rawConsent = asMap(adapterResponse.get("data"));
+        gatewayConsentService.updateStatus(consentId, String.valueOf(rawConsent.get("consentStatus")));
 
         Map<String, Object> consent = new LinkedHashMap<>();
         consent.put("id", consentId);
@@ -70,7 +86,7 @@ public class GatewayService {
         consent.put("validUntil", rawConsent.get("validUntil"));
         consent.put("frequencyPerDay", rawConsent.get("frequencyPerDay"));
         consent.put("recurringIndicator", rawConsent.get("recurringIndicator"));
-        consent.put("links", rawConsent.get("_links"));
+        consent.put("links", buildGatewayConsentLinks(consentId));
 
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("consent", consent);
@@ -80,10 +96,13 @@ public class GatewayService {
     public Map<String, Object> deleteDnbConsent(String correlationId, String psuId, String consentId)
             throws IOException, GeneralSecurityException, InterruptedException {
         LOGGER.info("Deleting DNB consent through adapter. consentId={} X-Correlation-Id={}", consentId, correlationId);
-        Map<String, Object> adapterResponse = adapterDnbClientService.deleteConsent(correlationId, psuId, consentId);
+        var consentReference = gatewayConsentService.getConsentReference(consentId, DNB_PROVIDER, psuId);
+        Map<String, Object> adapterResponse =
+                adapterDnbClientService.deleteConsent(correlationId, psuId, consentReference.aspspConsentId());
+        gatewayConsentService.updateStatus(consentId, "terminatedByTpp");
         Map<String, Object> consent = new LinkedHashMap<>();
         consent.put("id", consentId);
-        consent.put("status", "deleted");
+        consent.put("status", "terminatedByTpp");
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("consent", consent);
         return buildEnvelope(adapterResponse, payload);
@@ -92,8 +111,11 @@ public class GatewayService {
     public Map<String, Object> getDnbConsentStatus(String correlationId, String psuId, String consentId)
             throws IOException, GeneralSecurityException, InterruptedException {
         LOGGER.info("Fetching DNB consent status through adapter. consentId={} X-Correlation-Id={}", consentId, correlationId);
-        Map<String, Object> adapterResponse = adapterDnbClientService.getConsentStatus(correlationId, psuId, consentId);
+        var consentReference = gatewayConsentService.getConsentReference(consentId, DNB_PROVIDER, psuId);
+        Map<String, Object> adapterResponse =
+                adapterDnbClientService.getConsentStatus(correlationId, psuId, consentReference.aspspConsentId());
         Map<String, Object> rawStatus = asMap(adapterResponse.get("data"));
+        gatewayConsentService.updateStatus(consentId, String.valueOf(rawStatus.get("consentStatus")));
         Map<String, Object> consent = new LinkedHashMap<>();
         consent.put("id", consentId);
         consent.put("status", rawStatus.get("consentStatus"));
@@ -105,7 +127,8 @@ public class GatewayService {
     public Map<String, Object> getDnbAccounts(String correlationId, String consentId)
             throws IOException, GeneralSecurityException, InterruptedException {
         LOGGER.info("Fetching DNB accounts through adapter. X-Correlation-Id={}", correlationId);
-        Map<String, Object> adapterResponse = adapterDnbClientService.fetchAccounts(correlationId, consentId);
+        String aspspConsentId = gatewayConsentService.getConsentReference(consentId).aspspConsentId();
+        Map<String, Object> adapterResponse = adapterDnbClientService.fetchAccounts(correlationId, aspspConsentId);
         Map<String, Object> raw = asMap(adapterResponse.get("data"));
         List<Map<String, Object>> accounts = mapAccounts(raw.get("accounts"));
         Map<String, Object> payload = new LinkedHashMap<>();
@@ -116,8 +139,9 @@ public class GatewayService {
     public Map<String, Object> getDnbAccountDetails(String correlationId, String consentId, String accountNumber)
             throws IOException, GeneralSecurityException, InterruptedException {
         LOGGER.info("Fetching DNB account details through adapter. accountNumber={} X-Correlation-Id={}", accountNumber, correlationId);
+        String aspspConsentId = gatewayConsentService.getConsentReference(consentId).aspspConsentId();
         Map<String, Object> adapterResponse =
-                adapterDnbClientService.fetchAccountDetails(correlationId, consentId, accountNumber);
+                adapterDnbClientService.fetchAccountDetails(correlationId, aspspConsentId, accountNumber);
         Map<String, Object> raw = asMap(adapterResponse.get("data"));
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("account", mapAccount(raw));
@@ -127,8 +151,9 @@ public class GatewayService {
     public Map<String, Object> getDnbBalances(String correlationId, String consentId, String accountNumber)
             throws IOException, GeneralSecurityException, InterruptedException {
         LOGGER.info("Fetching DNB balances through adapter. accountNumber={} X-Correlation-Id={}", accountNumber, correlationId);
+        String aspspConsentId = gatewayConsentService.getConsentReference(consentId).aspspConsentId();
         Map<String, Object> adapterResponse =
-                adapterDnbClientService.fetchBalances(correlationId, consentId, accountNumber);
+                adapterDnbClientService.fetchBalances(correlationId, aspspConsentId, accountNumber);
         Map<String, Object> raw = asMap(adapterResponse.get("data"));
         List<Map<String, Object>> balances = mapBalances(raw.get("balances"));
         Map<String, Object> payload = new LinkedHashMap<>();
@@ -139,12 +164,18 @@ public class GatewayService {
 
     private Map<String, Object> buildEnvelope(Map<String, Object> adapterResponse, Map<String, Object> payload) {
         Map<String, Object> result = new LinkedHashMap<>();
-        result.put("provider", "dnb");
+        result.put("provider", DNB_PROVIDER);
         result.put("adapter", "adapter-dnb");
         result.put("correlationId", adapterResponse.get("correlationId"));
         result.put("status", "SUCCESS");
         result.putAll(payload);
         return result;
+    }
+
+    private Map<String, Object> buildGatewayConsentLinks(String gatewayConsentId) {
+        return Map.of(
+                "self", Map.of("href", "/api/v1/gateway/aspsps/dnb/consents/" + gatewayConsentId),
+                "status", Map.of("href", "/api/v1/gateway/aspsps/dnb/consents/" + gatewayConsentId + "/status"));
     }
 
     private List<Map<String, Object>> mapAccounts(Object rawAccounts) {

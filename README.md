@@ -2,6 +2,8 @@
 
 Spring Boot 3 / Java 17 backend behind Kong, with an optional local observability profile that pushes logs into Splunk through Fluent Bit.
 
+The gateway now owns consent identifiers exposed to TPP callers and persists the mapping to ASPSP consent IDs in PostgreSQL.
+
 ## Structure
 
 - `src/` contains the Spring Boot application
@@ -11,6 +13,7 @@ Spring Boot 3 / Java 17 backend behind Kong, with an optional local observabilit
 - `deploy/nginx/` contains the mTLS edge configuration
 - `deploy/outbound-nginx/` contains the outbound DNB API gateway configuration
 - `deploy/observability/fluent-bit/` contains the log forwarder configuration
+- `deploy/docker-compose.yml` now includes a local PostgreSQL runtime for gateway consent persistence
 - `ci/jenkins/` contains Jenkins CI/CD pipelines for the gateway and adapter
 - `ci/local/` contains a local Jenkins + Artifactory runtime
 - `scripts/` contains repeatable local run commands
@@ -157,10 +160,17 @@ Gateway canonical endpoints:
 
 ```bash
 curl -i http://localhost:8000/psd2/aspsps/dnb/accounts/summary
-curl -i http://localhost:8000/psd2/aspsps/dnb/accounts -H 'Consent-ID: CONSENT-STATIC-001'
-curl -i http://localhost:8000/psd2/aspsps/dnb/accounts/15030012345 -H 'Consent-ID: CONSENT-STATIC-001'
-curl -i http://localhost:8000/psd2/aspsps/dnb/accounts/15030012345/balances -H 'Consent-ID: CONSENT-STATIC-001'
 curl -i -X POST http://localhost:8000/psd2/aspsps/dnb/consents -H 'Content-Type: application/json' -H 'PSU-ID: demo-psu' -H 'TPP-Redirect-URI: https://tpp.local/callback' -d '{"access":{"accounts":[{"iban":"NO0015030012345"}],"balances":[{"iban":"NO0015030012345"}],"transactions":[{"iban":"NO0015030012345"}]},"recurringIndicator":true,"validUntil":"2026-12-31","frequencyPerDay":4,"combinedServiceIndicator":false}'
+```
+
+Use the `consent.id` returned by the create-consent call for follow-up consent and account requests:
+
+```bash
+curl -i http://localhost:8000/psd2/aspsps/dnb/consents/<gateway-consent-id> -H 'PSU-ID: demo-psu'
+curl -i http://localhost:8000/psd2/aspsps/dnb/consents/<gateway-consent-id>/status -H 'PSU-ID: demo-psu'
+curl -i http://localhost:8000/psd2/aspsps/dnb/accounts -H 'Consent-ID: <gateway-consent-id>'
+curl -i http://localhost:8000/psd2/aspsps/dnb/accounts/15030012345 -H 'Consent-ID: <gateway-consent-id>'
+curl -i http://localhost:8000/psd2/aspsps/dnb/accounts/15030012345/balances -H 'Consent-ID: <gateway-consent-id>'
 ```
 
 ## Live Logs
